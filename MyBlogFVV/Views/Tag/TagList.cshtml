@@ -1,0 +1,70 @@
+﻿@model MyBlogFVV.WEB.Models.Tag.SearchTagsViewModel;
+
+<div class="ContentCenter">
+    <div>
+        <div>
+            <form asp-area="" asp-controller="Tag" asp-action="TagList" method="post">
+                <input class="ipt" type="number" placeholder="Поиск по Id" name="Id" />
+            </form>
+        </div>        
+
+        <div>
+
+            @if (Model.TagList.Count != 0)
+            {
+                <table class="tbl">
+                    <thead>
+                        <tr><th>Id</th><th>Тег</th><th>Удалить</th><th>Редактировать</th></tr>
+                    </thead>
+                    @foreach (var item in @Model.TagList)
+                    {
+                        <tbody>
+                            <tr>
+                                <!--Id-->
+                                <td>
+                                    @item.Id
+                                </td>                                
+                                <!--Тег-->
+                                <td>
+                                    @item.Text
+                                </td>
+                                <!--Кнопка удаления тега-->
+                                <td>
+                                    <form asp-controller="Tag" asp-action="Delete" asp-route-tagId=@item.Id method="post">
+                                        <button type="submit" class="btn">
+                                            Удалить тег
+                                        </button>
+                                    </form>
+                                </td>
+                                <!--Кнопка редактирования тега-->
+                                <td>
+                                    <form asp-controller="Tag" asp-action="Edit" asp-route-tagId=@item.Id method="post">
+                                        <button type="submit" class="btn">
+                                            Редактировать тег
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
+                    <tfoot>
+                        <tr><td>Всего тегов </td><td>@Model.TagList.Count</td></tr>
+                    </tfoot>
+                </table>
+            }
+            else
+            {
+                <label> Поиск не дал результатов.</label>
+            }
+        </div>
+
+        <div>
+            <form asp-controller="Tag" asp-action="Add" method="get">
+                <button type="submit" class="btn">
+                    Добавить тег
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿@model MyBlogFVV.WEB.Models.Tag.TagViewModel
+
+@{
+    ViewData["Title"] = "TagAdd";
+}
+
+<div class="ContentCenter">
+    <h2>Создание нового тега</h2>
+    <form method="post" asp-controller="Tag" asp-action="Add">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Text"></label><br />
+            <input asp-for="Text" />
+        </div>
+        <div>
+            <input class="btn" type="submit" value="Создать тег" />
+        </div>
+    </form>
+</div>

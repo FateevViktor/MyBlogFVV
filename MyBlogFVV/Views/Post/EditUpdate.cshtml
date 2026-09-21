@@ -1,0 +1,36 @@
+﻿@model MyBlogFVV.WEB.Models.Post.PostViewModel
+
+@{
+    ViewData["Title"] = "EditUpdate";
+}
+<div class="ContentCenter">
+    <div>
+        <h2>Редактирование статьи</h2>
+        <form method="post" asp-controller="Post" asp-action="EditUpdate">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="Id"></label><br />
+                <input asp-for="Id" class="ipt" />
+                <span asp-validation-for="Id"></span>
+            </div>
+            <div>
+                <label asp-for="PostDate"></label><br />
+                <input asp-for="PostDate" class="ipt" />
+                <span asp-validation-for="PostDate"></span>
+            </div>
+            <div>
+                <label asp-for="Title"></label><br />
+                <input asp-for="Title" class="ipt" />
+                <span asp-validation-for="Title"></span>
+            </div>
+            <div>
+                <label asp-for="Text"></label><br />
+                <textarea class="TextPost" asp-for="Text"></textarea>
+                <span asp-validation-for="Text"></span>
+            </div>
+            <div>
+                <input type="submit" value="Сохранить" class="btnn" />
+            </div>
+        </form>
+    </div>
+</div>

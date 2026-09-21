@@ -1,0 +1,71 @@
+﻿@model MyBlogFVV.WEB.Models.User.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="ContentCenter">
+    @if (ViewBag.RegistrationSuccessful == false)
+    {
+        <h2>Регистрация нового пользователя</h2>
+        <form method="post" asp-controller="User" asp-action="Register">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="FirstName"></label><br />
+                <input asp-for="FirstName" />
+                <div>
+                    <span class="MessageError" asp-validation-for="FirstName"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="LastName"></label><br />
+                <input asp-for="LastName" />
+                <div>
+                    <span class="MessageError" asp-validation-for="LastName"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="Login"></label><br />
+                <input asp-for="Login" />
+                <div>
+                    <span class="MessageError" asp-validation-for="Login"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="Email"></label><br />
+                <input asp-for="Email" />
+                <div>
+                    <span class="MessageError" asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="BirthDate"></label><br />
+                <input asp-for="BirthDate" />
+                <div>
+                    <span class="MessageError" asp-validation-for="BirthDate"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="Password"></label><br />
+                <input asp-for="Password" />
+                <div>
+                    <span class="MessageError" asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="PasswordConfirm"></label><br />
+                <input asp-for="PasswordConfirm" />
+                <div>
+                    <span class="MessageError" asp-validation-for="PasswordConfirm"></span>
+                </div>
+            </div>
+            <div>
+                <input class="btn" type="submit" value="Регистрация" />
+            </div>
+        </form>
+    }
+    else
+    {
+        @await Html.PartialAsync("_Thanks")
+    }
+</div>

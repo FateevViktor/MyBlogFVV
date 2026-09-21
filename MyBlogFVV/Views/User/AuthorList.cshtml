@@ -1,0 +1,72 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@model MyBlogFVV.WEB.Models.User.SearchUsersViewModel;
+
+@{
+    var IsInRoleAdmin = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
+}
+
+<div class="ContentCenter">
+    <div>
+        <div>
+            <form asp-area="" asp-controller="User" asp-action="AuthorList" method="post">
+                <input class="ipt"  type="number" placeholder="Поиск по Id" name="Id" />
+            </form>
+        </div>
+
+        <div>
+
+            @if (Model.UserList.Count != 0)
+            {
+                <table class="tbl">
+                    <thead>
+                        <tr >
+                            <th>Аватар</th>
+                            <th>Id</th>
+                            <th>ФИО</th>
+                            @if (IsInRoleAdmin == true)
+                            {
+                                <th class="tbl">Удалить автора</th>
+                            }
+                        </tr>
+                    </thead>
+                    @foreach (var user in @Model.UserList)
+                    {
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img class="AvatarImgChat" src="/img/fox_avatar.png">
+                                </td>
+                                <td>
+                                    <p>
+                                        @user.Id
+                                    </p>                                    
+                                </td>
+                                <td style="min-width:100px">@user.FirstName @user.LastName @user.MiddleName</td>
+                                
+                                <!--Кнопка удаления автора-->                                
+                                <td>
+                                    @if (IsInRoleAdmin == true)
+                                    {
+                                        <form asp-controller="User" asp-action="Delete" asp-route-id=@user.Id method="post">
+                                            <button type="submit" class="btn">
+                                                Удалить пользователя
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    }
+                    <tfoot>
+                        <tr><td>Всего пользователей </td><td>@Model.UserList.Count</td></tr>
+                    </tfoot>
+                </table>
+            }
+            else
+            {
+                <label> Поиск не дал результатов.</label>
+            }
+        </div>
+    </div>
+</div>

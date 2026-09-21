@@ -1,0 +1,55 @@
+﻿@model MyBlogFVV.WEB.Models.Post.PostViewModel
+
+@{
+    ViewData["Title"] = "PostAdd";
+}
+
+<div class="ContentCenter">
+    @if (ViewBag.PostAddSuccessful == false)
+    {
+        <h2>Создание новой статьи</h2>
+        <form method="post" asp-controller="Post" asp-action="Add">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <p>
+                    Автор статьи:
+                </p>
+                <p>
+                    Id: @Model.Author.Id
+                </p>
+                <p>
+                    Имя: @Model.Author.FirstName
+                </p>
+            </div>
+            <div>
+                <label asp-for="PostDate"></label><br />
+                <input asp-for="PostDate" />
+                <div>
+                    <span class="MessageError" asp-validation-for="PostDate"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="Title"></label><br />
+                <input asp-for="Title" />
+            </div>
+            <div>
+                <label asp-for="Text"></label><br />
+                <p>
+                    <textarea class="TextPost" asp-for="Text"></textarea>
+                </p>
+                <!--<input asp-for="Text" />-->
+                <div>
+                    <span class="MessageError" asp-validation-for="Text"></span>
+                </div>
+            </div>
+
+            <div>
+                <input class="btn" type="submit" value="Создать статью" />
+            </div>
+        </form>
+    }
+    else
+    {
+        @await Html.PartialAsync("_ThanksPost")
+    }
+</div>

@@ -1,0 +1,134 @@
+
+CREATE TABLE Users (
+	UserId	INTEGER PRIMARY KEY AUTOINCREMENT,
+	FirstName    TEXT NOT NULL,
+	LastName     TEXT,
+	MiddleName   TEXT,
+	BirthDate    TEXT,
+	Email	     TEXT NOT NULL,
+	Login	     TEXT NOT NULL,
+	Password     TEXT NOT NULL
+	);
+
+CREATE TABLE Posts (
+	PostId       INTEGER PRIMARY KEY AUTOINCREMENT,
+	UserId       INTEGER,
+	Text         TEXT,
+	FOREIGN KEY (UserId)  REFERENCES Users(UserId)
+	);
+
+CREATE TABLE Comments (
+	CommentId    INTEGER PRIMARY KEY AUTOINCREMENT,
+	PostId       INTEGER,
+	UserId       INTEGER,
+	Date         TEXT,
+	Text         TEXT,
+        FOREIGN KEY(PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
+	FOREIGN KEY(UserId) REFERENCES Users(UserId)
+	);
+
+CREATE TABLE Tags (
+	TagId	     INTEGER PRIMARY KEY AUTOINCREMENT,
+	Text         TEXT
+	);
+
+CREATE TABLE PostTags (
+	PostTagId     INTEGER PRIMARY KEY AUTOINCREMENT,
+	PostId        INTEGER,
+	TagId         INTEGER,
+        FOREIGN KEY(PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
+	FOREIGN KEY(TagId) REFERENCES Tags(TagId)
+	);
+
+CREATE TABLE Roles (
+	RoleId	     INTEGER PRIMARY KEY AUTOINCREMENT,
+	Text         TEXT
+	);
+
+CREATE TABLE UserRoles (
+	UserRoleId    INTEGER PRIMARY KEY AUTOINCREMENT,
+	UserId        INTEGER,
+	RoleId        INTEGER,
+        FOREIGN KEY(UserId) REFERENCES Users(UserId) ON DELETE CASCADE,
+	FOREIGN KEY(RoleId) REFERENCES Roles(RoleId)
+	);
+
+//-------Добавить запись------------------
+-- Вставка одной записи
+INSERT INTO Users (FirstName, Email, Login, Password)
+VALUES ('Виктор', 'fateevvv@yandex.ru', 'FateevVV', '11111');
+
+-- Вставка одной записи
+INSERT INTO Users (FirstName, LastName, Email, Login, Password)
+VALUES ('Иван', 'Фатеев', 'fateeviv@yandex.ru', 'FateevIV', '11111');
+
+-- Вставка одной записи Id 1
+INSERT INTO Roles (Text)
+VALUES ('User');
+
+-- Вставка одной записи Id 2
+INSERT INTO Roles (Text)
+VALUES ('Admin');
+
+-- Вставка одной записи Id 3
+INSERT INTO Roles (Text)
+VALUES ('Moderator');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('1', '2');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('2', '3');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('7', '1');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('3', '1');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('4', '1');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('5', '1');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('6', '1');
+
+-- Вставка одной записи 
+INSERT INTO UserRoles (UserId, RoleId)
+VALUES ('8', '1');
+
+-- Вставка одной записи Id 1
+INSERT INTO Tags (Text)
+VALUES ('Нет тега');
+
+--Добавить поле (столбец)
+ALTER TABLE Posts ADD COLUMN Date TEXT;
+
+--Добавить поле (столбец)
+ALTER TABLE Posts ADD COLUMN Title TEXT;
+
+--Удалить таблицу из БД
+DROP TABLE Comments
+--Удалить таблицу из БД
+DROP TABLE PostTags
+--Удалить таблицу из БД
+DROP TABLE Tags
+
+--Изменить запись в 
+UPDATE Posts SET Title = 'Заголовок первого поста' WHERE PostId = 1;
+
+--Проверить связи во всей БД
+PRAGMA foreign_key_check;
+
+
+
+

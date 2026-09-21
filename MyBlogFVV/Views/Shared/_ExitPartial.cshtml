@@ -1,0 +1,21 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+	var username = HttpContextAccessor.HttpContext.User.Identity.Name;
+	var roles = HttpContextAccessor.HttpContext.User.Claims.ToList();
+	var roles1 = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
+}
+@if (username==null)
+{
+	<form method="get" asp-controller="User" asp-action="Login">
+		<input class="btnInvers" type="submit" value="Войти" />
+	</form>
+}
+else
+{
+	<form method="post" asp-controller="User" asp-action="Logout">
+		<span>@username      </span>
+		<a asp-area="" asp-controller="User" asp-action="MyPage">Мой профиль</a>
+		<input class="btnInvers" type="submit" value="Выход" />
+	</form>
+}

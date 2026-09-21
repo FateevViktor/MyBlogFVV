@@ -1,0 +1,14 @@
+﻿@using MyBlogFVV.WEB.Models.Comment
+@model CommentViewModel
+
+<hr>
+<p>
+    Дата: @Model.CommentDate.ToString()
+</p>
+<p>
+    Автор: @Model.Author.LastName @Model.Author.FirstName @Model.Author.MiddleName
+</p>
+<p>
+    Комментарий: @Model.Text
+</p>
+<hr>

@@ -1,0 +1,84 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@model MyBlogFVV.WEB.Models.Comment.SearchCommentsViewModel;
+
+@{
+    var username = HttpContextAccessor.HttpContext.User.Identity.Name;
+    var IsInRoleAdmin = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
+    var IsInRoleModerator = HttpContextAccessor.HttpContext.User.IsInRole("Moderator");
+}
+
+<div class="ContentCenter">
+    <div>
+        <div>
+            <form asp-area="" asp-controller="Comment" asp-action="CommentList" method="post">
+                <input class="ipt" type="number" placeholder="Поиск по Id" name="Id" />
+            </form>
+        </div>
+
+        <div>
+
+            @if (Model.CommentList.Count != 0)
+            {
+                <table class="tbl">
+                    <thead>
+                        <tr><th>Id</th><th>Дата</th><th>Автор</th><th>Название статьи</th><th>Комментарий</th><th>Удалить</th><th>Редактировать</th></tr>
+                    </thead>
+                    @foreach (var item in @Model.CommentList)
+                    {
+                        <tbody>
+                            <tr>
+                                <!--Id-->
+                                <td>
+                                    @item.Id
+                                </td>
+                                <!--Дата-->
+                                <td>
+                                    @item.CommentDate.ToString()
+                                </td>
+                                <!--Автор-->
+                                <td style="min-width:300px">@item.Author.FirstName @item.Author.LastName @item.Author.MiddleName</td>
+                                <!--Заголовок статьи-->
+                                <td>
+                                    @item.Post.Title
+                                </td>
+                                <!--Комментарий-->
+                                <td>
+                                    @item.Text
+                                </td>
+                                <!--Кнопка удаления комментария-->
+                                <td>
+                                @if (username == item.Author.Login || IsInRoleAdmin == true)
+                                {
+                                    <form asp-controller="Comment" asp-action="Delete" asp-route-commentId=@item.Id method="post">
+                                        <button type="submit" class="btn">
+                                            Удалить комментарий
+                                        </button>
+                                    </form>
+                                }
+                                </td>
+                                <!--Кнопка редактирования комментария-->
+                                <td>
+                                    @if (username == item.Author.Login || IsInRoleAdmin == true || IsInRoleModerator == true)
+                                    {
+                                        <form asp-controller="Comment" asp-action="Edit" asp-route-commentId=@item.Id method="post">
+                                            <button type="submit" class="btn">
+                                                Редактировать комментарий
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
+                    <tfoot>
+                        <tr><td>Всего комментариев </td><td>@Model.CommentList.Count</td></tr>
+                    </tfoot>
+                </table>
+            }
+            else
+            {
+                <label> Поиск не дал результатов.</label>
+            }
+        </div>
+    </div>
+</div>

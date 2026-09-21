@@ -1,0 +1,41 @@
+﻿@model MyBlogFVV.WEB.Models.User.UserEditViewModel
+
+@{
+    ViewData["Title"] = "UserEdit";
+}
+<div class="ContentCenter">
+    <div>
+        <h2>Редактирование пользователя</h2>
+        <form method="post" asp-controller="User" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="FirstName"></label><br />
+                <input asp-for="FirstName" class="ipt" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
+            <div>
+                <label asp-for="LastName"></label><br />
+                <input asp-for="LastName" class="ipt" />
+                <span asp-validation-for="LastName"></span>
+            </div>
+            <div>
+                <label asp-for="MiddleName"></label><br />
+                <input asp-for="MiddleName" class="ipt" />
+                <span asp-validation-for="MiddleName"></span>
+            </div>
+            <div>
+                <label asp-for="Email"></label><br />
+                <input asp-for="Email" class="ipt" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div>
+                <label asp-for="BirthDate"></label><br />
+                <input asp-for="BirthDate" class="ipt" />
+                <span asp-validation-for="BirthDate"></span>
+            </div>
+            <div>
+                <input type="submit" value="Сохранить" class="btnn" />
+            </div>
+        </form>
+    </div>
+</div>

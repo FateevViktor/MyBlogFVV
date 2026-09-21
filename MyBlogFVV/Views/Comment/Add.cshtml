@@ -1,0 +1,29 @@
+﻿@model MyBlogFVV.WEB.Models.Comment.CommentViewModel
+
+@{
+    ViewData["Title"] = "CommentAdd";
+}
+
+<div class="ContentCenter">
+    <h2>Создание нового комментария</h2>
+    <form method="post" asp-controller="Comment" asp-action="Add">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Text"></label><br />
+            <input asp-for="Text" />
+        </div>
+        <div>
+            <label asp-for="@Model.Author.Id"></label><br />
+            <input asp-for="@Model.Author.Id" class="ipt" readonly />
+            <span asp-validation-for="@Model.Author.Id"></span>
+        </div>
+        <div>
+            <label asp-for="@Model.Post.Id"></label><br />
+            <input asp-for="@Model.Post.Id" class="ipt" readonly />
+            <span asp-validation-for="@Model.Post.Id"></span>
+        </div>
+        <div>
+            <input class="btn" type="submit" value="Создать комментарий" />
+        </div>
+    </form>
+</div>

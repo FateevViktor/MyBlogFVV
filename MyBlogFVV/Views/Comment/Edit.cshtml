@@ -1,0 +1,31 @@
+﻿@model MyBlogFVV.WEB.Models.Comment.CommentEditViewModel
+
+@{
+    ViewData["Title"] = "CommentEdit";
+}
+<div class="ContentCenter">
+    <div>
+        <h2>Редактирование комментария</h2>
+        <form method="post" asp-controller="Comment" asp-action="EditUpdate">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="Id"></label><br />
+                <input asp-for="Id" class="ipt" readonly />
+                <span asp-validation-for="Id"></span>
+            </div>
+            <div>
+                <label asp-for="CommentDate"></label><br />
+                <input asp-for="CommentDate" class="ipt" />
+                <span asp-validation-for="CommentDate"></span>
+            </div>
+            <div>
+                <label asp-for="Text"></label><br />
+                <textarea class="TextPost" asp-for="Text"></textarea>
+                <span asp-validation-for="Text"></span>
+            </div>
+            <div>
+                <input type="submit" value="Сохранить" class="btnn" />
+            </div>
+        </form>
+    </div>
+</div>

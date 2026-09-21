@@ -1,0 +1,57 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@using MyBlogFVV.WEB.Models.Comment
+@model MyBlogFVV.WEB.Models.Post.PostViewModel
+
+@{
+    ViewData["Title"] = "ShowPost";
+}
+
+@{
+    var username = HttpContextAccessor.HttpContext.User.Identity.Name;
+    var IsInRoleAdmin = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
+    var IsInRoleModerator = HttpContextAccessor.HttpContext.User.IsInRole("Moderator");
+}
+
+<div class="ContentCenter">
+    <div>
+        <h2>@Model.Title</h2>
+        <p>
+            @Model.Text
+        </p>
+        <p>
+            Автор статьи: @Model.Author.LastName @Model.Author.FirstName @Model.Author.MiddleName
+        </p>
+        <p>
+            Дата статьи: @Model.PostDate.ToString();
+        </p>
+    </div>
+    <div>
+        <p>
+            Добавить комментарий:
+        </p>
+        
+        <form method="post" asp-controller="Comment" asp-action="Add">
+            <p>
+                <label>Комментарий:</label><br />
+                <textarea name="text"></textarea>
+            </p>
+            <div hidden>
+                <input type='text' value=@username name='login' /><br />
+                <input type='number' value=@Model.Id name='postId' /><br />
+            </div>
+            <input type='submit' value='Send' />
+        </form>
+
+        <p>
+            Комментарии к посту:
+        </p>
+        @foreach (var item in @Model.Comment)
+        {
+            <partial name="_ShowComment" model="item" />
+        }
+
+    </div>
+    <div>
+
+    </div>
+</div>

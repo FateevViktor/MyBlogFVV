@@ -1,0 +1,77 @@
+﻿@using MyBlogFVV.WEB.Models.User;
+@model MyPageViewModel;
+
+@{
+    ViewData["Title"] = "Пользователь";
+}
+
+<div class="UserProfilHeader">
+    <!-- пишем заголовок и пояснительный текст -->
+    <h2>@Model?.LastName @Model?.FirstName @Model?.MiddleName</h2>
+    <p>Ваш профиль</p>
+</div>
+
+<div class="UserProfil">
+    <div class="UserProfilMainLeft">
+        <form asp-controller="User" asp-action="Edit" method="get">
+            <img class="UserProfilImg" src="/img/fox_avatar.png">
+            <button type="submit" class="btn">
+                Редактировать профиль
+            </button>
+        </form>
+    </div>
+
+    <div>
+        <!--Информация обо мне-->
+        <p>Логин: @Model?.Login</p>
+        <p>ФИО: @Model?.LastName @Model?.FirstName @Model?.MiddleName</p>
+        <p>Дата рождения: @Model?.BirthdayDate.ToString()</p>
+        <p>Email: @Model?.Email</p>
+        
+        <!--Добавить статью-->
+        <div>
+            <form method="get" asp-controller="Post" asp-action="Add">
+                <input class="btn" type="submit" value="Создать статью" />
+            </form>
+        </div>
+
+        <!--Посмотреть все статьи-->
+        <div>
+            <form method="get" asp-controller="Post" asp-action="PostList">
+                <input class="btn" type="submit" value="Посмотреть все статьи" />
+            </form>
+        </div>
+
+        <!--Посмотреть мои статьи-->
+        <div>
+            <form method="get" asp-controller="Post" asp-action="MyPostList">
+                <input class="btn" type="submit" value="Посмотреть мои статьи" />
+            </form>
+        </div>
+
+        <!--Посмотреть все комментарии-->
+        <div>
+            <form method="get" asp-controller="Comment" asp-action="CommentList">
+                <input class="btn" type="submit" value="Посмотреть все комментарии" />
+            </form>
+        </div>
+
+        <!--Найти автора-->
+        <div>
+            <form asp-controller="User" asp-action="AuthorList" method="get">
+                <button type="submit" class="btn">
+                    Найти автора статей
+                </button>
+            </form>
+        </div>
+
+        <!--Теги-->
+        <div>
+            <form asp-controller="Tag" asp-action="TagList" method="get">
+                <button type="submit" class="btn">
+                    Работа с тегами
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

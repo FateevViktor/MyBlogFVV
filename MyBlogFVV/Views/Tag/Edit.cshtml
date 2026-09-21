@@ -1,0 +1,27 @@
+﻿@model MyBlogFVV.WEB.Models.Tag.TagEditViewModel
+
+@{
+    ViewData["Title"] = "TagEdit";
+}
+<div class="ContentCenter">
+    <div>
+        <h2>Редактирование тега</h2>
+        <form method="post" asp-controller="Tag" asp-action="UpdateEdit">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="Id"></label><br />
+                <input asp-for="Id" class="ipt" readonly />
+                <span asp-validation-for="Id"></span>
+            </div>
+            <div>
+                <label asp-for="Text"></label><br />
+                <input asp-for="Text" class="ipt" />
+                <span asp-validation-for="Text"></span>
+            </div>
+            <div>
+                <input type="submit" value="Сохранить" class="btnn" />
+            </div>
+        </form>
+    </div>
+</div>
+
