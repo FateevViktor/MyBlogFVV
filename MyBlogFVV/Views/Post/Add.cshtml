@@ -1,4 +1,4 @@
-﻿@model MyBlogFVV.WEB.Models.Post.PostViewModel
+﻿@model MyBlogFVV.WEB.Models.Post.PostAddViewModel
 
 @{
     ViewData["Title"] = "PostAdd";
@@ -8,8 +8,24 @@
     @if (ViewBag.PostAddSuccessful == false)
     {
         <h2>Создание новой статьи</h2>
-        <form method="post" asp-controller="Post" asp-action="Add">
+
+        <form class="ContentCenter" method="post" asp-controller="Post" asp-action="Add">
             <div asp-validation-summary="ModelOnly"></div>
+            <h2>Используемые теги</h2>
+            <!-- выводим теги -->
+            <div>
+                @for (int i = 0; i < Model.Tag.Count; i++)
+                {
+                    <div hidden>
+                        <input type="number" asp-for="Tag[@i].Id" /><br />
+                        <input type="text" asp-for="Tag[@i].Text" /><br />
+                    </div>
+                    <input type="checkbox" asp-for="Tag[@i].Checked" />@Model.Tag[i].Text             
+                }
+            <br />
+            </div>
+            <!------------------------------------------>           
+            
             <div>
                 <p>
                     Автор статьи:
@@ -33,11 +49,12 @@
                 <input asp-for="Title" />
             </div>
             <div>
+                <label asp-for="Summary"></label><br />
+                <textarea class="TextPost" asp-for="Summary"></textarea>
+            </div>
+            <div>
                 <label asp-for="Text"></label><br />
-                <p>
-                    <textarea class="TextPost" asp-for="Text"></textarea>
-                </p>
-                <!--<input asp-for="Text" />-->
+                <textarea class="TextPost" asp-for="Text"></textarea>
                 <div>
                     <span class="MessageError" asp-validation-for="Text"></span>
                 </div>

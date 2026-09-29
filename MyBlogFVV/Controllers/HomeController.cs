@@ -1,23 +1,37 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBlogFVV.Models;
+using MyBlogFVV.BLL.Interfaces;
+using MyBlogFVV.BLL.Models.Post;
+using MyBlogFVV.WEB.Models;
+using MyBlogFVV.WEB.Models.Post;
+using MyBlogFVV.WEB.Services;
 using System.Diagnostics;
 
-namespace MyBlogFVV.Controllers
+namespace MyBlogFVV.WEB.Controllers
 {
     [Authorize(Policy = "OnlyForRoleAdmin")]
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger, IPostService postService) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger = logger;
+        readonly IPostService _postService = postService;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        /// <summary>
+        /// Главная страница, выдаем последние посты.
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            SearchPostsViewModel searchPostsViewModel = new();
+
+            List<PostRequest> postList = await _postService.GetAll();
+            List<PostRequest> postListSorted = [];
+            postListSorted = [.. postList.OrderByDescending(p => p.PostDate)];
+            if (postList != null)
+            {
+                searchPostsViewModel = MyMappingPost.GetSearchPostsViewModelFromListPostRequest(postListSorted);
+            }
+            return View(searchPostsViewModel);
         }
         [AllowAnonymous]
         public IActionResult About()
@@ -47,6 +61,17 @@ namespace MyBlogFVV.Controllers
         [Route("/AccessDanied")]
         [AllowAnonymous]
         public IActionResult AccessDanied()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// страничка выпадает, если пользователь переходит на несуществующую страничку
+        /// </summary>
+        /// <returns></returns>
+        [Route("NotFoundContent")]
+        [AllowAnonymous]
+        public IActionResult NotFoundContent()
         {
             return View();
         }

@@ -8,9 +8,9 @@ namespace MyBlogFVV.DAL.Interfaces
         IPostRepository Posts { get; }
         ICommentRepository Comments { get; }
         ITagRepository Tags { get; }
-        //IRepository<PostTag> PostTags { get; }
+        IRepository<PostTag> PostTags { get; }
         IRepository<UserRole> UserRoles { get; }
-        IRepository<Role> Roles { get; }
+        IRoleRepository Roles { get; }
         Task Save();
     }
 }

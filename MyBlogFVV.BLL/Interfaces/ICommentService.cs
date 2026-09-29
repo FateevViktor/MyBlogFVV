@@ -8,6 +8,7 @@ namespace MyBlogFVV.BLL.Interfaces
     {
         Task<OperationDetails> Create(CommentRequest commentRequest); //Создание комментария
         Task<List<CommentRequest>> GetAll(); //получить все комментарии
+        Task<List<CommentRequest>> GetAllUser(int idUser); //получить все комментарии пользователя
         Task<CommentRequest?> GetCommentById(int id); //Получить комментарий по Id
         Task<OperationDetails> Update(CommentRequest commentRequest); //Редактировать комментарий
         Task<OperationDetails> Delete(int id); //Удаление комментария по его Id

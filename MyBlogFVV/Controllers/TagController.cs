@@ -11,14 +11,10 @@ namespace MyBlogFVV.WEB.Controllers
     [Route("Tag")]
     [Authorize]
     //[Authorize(Policy = "OnlyForRoleAdmin")]
-    public class TagController : Controller
+    public class TagController(ITagService tagService) : Controller
     {
-        MyMappingTag myMappingTag = new MyMappingTag();
-        ITagService _tagService;
-        public TagController(ITagService tagService)
-        {
-            _tagService = tagService;
-        }
+        readonly ITagService _tagService = tagService;
+
         public IActionResult Index()
         {
             return View();
@@ -28,7 +24,7 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            TagViewModel tagViewModel = new TagViewModel();
+            TagViewModel tagViewModel = new();
             return View(tagViewModel);
         }
         [Route("Add")]
@@ -37,7 +33,7 @@ namespace MyBlogFVV.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                TagRequest tagRequest = myMappingTag.GetTagRequestFromTagViewModel(model);
+                TagRequest tagRequest = MyMappingTag.GetTagRequestFromTagViewModel(model);
 
                 OperationDetails result = await _tagService.Create(tagRequest);
                 if (result.Succedeed == true)
@@ -57,15 +53,15 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int tagId)
         {
-            TagEditViewModel tagEditViewModel = new TagEditViewModel();
-            TagRequest? tagRequest = new TagRequest();
+            TagEditViewModel tagEditViewModel;
+            TagRequest? tagRequest;
             if (tagId > 0)
             {
                 tagRequest = await _tagService.GetTagById(tagId);
 
                 if (tagRequest != null)
                 {
-                    tagEditViewModel = myMappingTag.GetTagEditViewModelFromTagRequest(tagRequest);
+                    tagEditViewModel = MyMappingTag.GetTagEditViewModelFromTagRequest(tagRequest);
                     return View("Edit", tagEditViewModel);
                 }
             }
@@ -76,10 +72,10 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateEdit(TagEditViewModel model)
         {
-            TagRequest? tagRequest = new TagRequest();
+            TagRequest? tagRequest;
             if (ModelState.IsValid)
             {
-                tagRequest = myMappingTag.GetTagRequestFromTagEditViewModel(model);
+                tagRequest = MyMappingTag.GetTagRequestFromTagEditViewModel(model);
                 OperationDetails result = await _tagService.Update(tagRequest);
                 if (result.Succedeed == true)
                 {
@@ -129,11 +125,11 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> TagList()
         {
-            SearchTagsViewModel searchTagsViewModel = new SearchTagsViewModel();
+            SearchTagsViewModel searchTagsViewModel = new();
             List<TagRequest>? tagList = await _tagService.GetAll();
             if (tagList != null)
             {
-                searchTagsViewModel = myMappingTag.GetSearchTagsViewModelFromListTagRequest(tagList);
+                searchTagsViewModel = MyMappingTag.GetSearchTagsViewModelFromListTagRequest(tagList);
             }
             return View("TagList", searchTagsViewModel);
         }
@@ -142,16 +138,16 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> TagList(int Id)
         {
-            SearchTagsViewModel searchTagsViewModel = new SearchTagsViewModel();
+            SearchTagsViewModel searchTagsViewModel;
             if (Id > 0)
             {
-                TagRequest? tagRequest = new TagRequest();
+                TagRequest? tagRequest;
                 tagRequest = await _tagService.GetTagById(Id);
-                List<TagRequest> tagList = new List<TagRequest>();
+                List<TagRequest> tagList = [];
                 if (tagRequest != null)
                 {
                     tagList.Add(tagRequest);
-                    searchTagsViewModel = myMappingTag.GetSearchTagsViewModelFromListTagRequest(tagList);
+                    searchTagsViewModel = MyMappingTag.GetSearchTagsViewModelFromListTagRequest(tagList);
                     return View("TagList", searchTagsViewModel);
                 }
                 else
@@ -165,5 +161,24 @@ namespace MyBlogFVV.WEB.Controllers
             }
         }
         //------------------------------------------------
+        //----------Показать страничку с тегом------------
+        [Route("ShowTag")]
+        [HttpPost]
+        public async Task<IActionResult> ShowTag(int tagId)
+        {
+            TagViewModel tagViewModel;
+            if (tagId > 0)
+            {
+                TagRequest? tagRequest;
+                tagRequest = await _tagService.GetTagById(tagId);
+                if (tagRequest != null)
+                {
+                    tagViewModel = MyMappingTag.GetTagViewModelFromTagRequest(tagRequest);
+                    return View("ShowTag", tagViewModel);
+                }
+            }
+            return RedirectToAction("TagList", "Tag");
+        }
+        //----------------------------------------------
     }
 }

@@ -6,14 +6,10 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.DAL.Repositories
 {
-    public class CommentRepository : ICommentRepository
+    public class CommentRepository(ApplicationDbContext context) : ICommentRepository
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db = context;
 
-        public CommentRepository(ApplicationDbContext context)
-        {
-            this.db = context;
-        }
         public async Task Create(Comment item)
         {
             await db.Comments.AddAsync(item);
@@ -24,7 +20,7 @@ namespace MyBlogFVV.DAL.Repositories
             db.Comments.Remove(comment);
         }
 
-        public async Task<Comment> GetCommentById(int id)
+        public async Task<Comment?> GetCommentById(int id)
         {
             Comment? x = await db.Comments.FindAsync(id);
             return x;

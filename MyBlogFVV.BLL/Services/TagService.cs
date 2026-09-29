@@ -1,21 +1,16 @@
 ﻿
 using MyBlogFVV.BLL.Infrastructure;
 using MyBlogFVV.BLL.Interfaces;
-using MyBlogFVV.BLL.Models.Comment;
 using MyBlogFVV.BLL.Models.Tag;
 using MyBlogFVV.DAL.Entities;
 using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.BLL.Services
 {
-    public class TagService : ITagService
+    public class TagService(IUnitOfWork uow) : ITagService
     {
-        IUnitOfWork Database { get; set; }
-        MyMappingTag myMappingTag = new MyMappingTag();
-        public TagService(IUnitOfWork uow)
-        {
-            Database = uow;
-        }
+        IUnitOfWork Database { get; set; } = uow;
+
         public async Task<OperationDetails> Create(TagRequest tagRequest)
         {
             if (tagRequest == null)
@@ -31,7 +26,7 @@ namespace MyBlogFVV.BLL.Services
                     return new OperationDetails(false, "Такой тег уже существует", "Text");
                 }
 
-                Tag tag = myMappingTag.GetTagFromTagRequest(tagRequest);
+                Tag tag = MyMappingTag.GetTagFromTagRequest(tagRequest);
                 await Database.Tags.Create(tag);
                 await Database.Save();
                 return new OperationDetails(true, "Тег успешно создан", "");
@@ -56,16 +51,17 @@ namespace MyBlogFVV.BLL.Services
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Database.Dispose();
+            GC.SuppressFinalize(this); // Блокируем вызов финализатора
         }
 
         public async Task<List<TagRequest>> GetAll()
         {
-            List<TagRequest>? tagRequest = new List<TagRequest>();
-            List<Tag>? tags = await Database.Tags.GetAll();
+            List<TagRequest> tagRequest = [];
+            List<Tag> tags = await Database.Tags.GetAll();
             if (tags != null)
             {
-                tagRequest = myMappingTag.GetListTagRequestFromListTag(tags);
+                tagRequest = MyMappingTag.GetListTagRequestFromListTag(tags);
             }
             return tagRequest;
         }
@@ -77,7 +73,7 @@ namespace MyBlogFVV.BLL.Services
             Tag? tagСheck = await Database.Tags.GetTagById(id);
             if (tagСheck != null)
             {
-                tagRequest = myMappingTag.GetTagRequestFromTag(tagСheck);
+                tagRequest = MyMappingTag.GetTagRequestFromTag(tagСheck);
             }
             return tagRequest;
         }

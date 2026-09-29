@@ -7,7 +7,7 @@ namespace MyBlogFVV.DAL.Interfaces
     {
         Task<List<Post>> GetAll();
         Task<List<Post>> GetAll(int id);
-        Task<Post> Get(int id);
+        Task<Post?> Get(int id);
         Task Create(Post item);
         void Update(Post item);
         void Delete(int id);

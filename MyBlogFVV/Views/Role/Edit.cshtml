@@ -1,0 +1,32 @@
+﻿@model MyBlogFVV.WEB.Models.Role.RoleViewModel
+
+@{
+    ViewData["Title"] = "RoleEdit";
+}
+<div class="ContentCenter">
+    <div>
+        <h2>Редактирование роли</h2>
+        <form method="post" asp-controller="Role" asp-action="UpdateEdit">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="Id"></label><br />
+                <input asp-for="Id" class="ipt" readonly />
+                <span asp-validation-for="Id"></span>
+            </div>
+            <div>
+                <label asp-for="Title"></label><br />
+                <input asp-for="Title" class="ipt" />
+                <span asp-validation-for="Title"></span>
+            </div>
+            <div>
+                <label asp-for="Description"></label><br />
+                <textarea class="TextPost" asp-for="Description" >@Model.Description</textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+            <div>
+                <input type="submit" value="Сохранить" class="btn" />
+            </div>
+        </form>
+        <a href="/Role/RoleList">Перейти к списку ролей</a>
+    </div>
+</div>

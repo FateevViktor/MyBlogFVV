@@ -7,22 +7,25 @@ namespace MyBlogFVV.DAL.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db;
+        public UnitOfWork(ApplicationDbContext context)
+        {
+            db = context;
+        }
         
         private IUserRepository? userRepository;
         private IPostRepository? postRepository;
         private ICommentRepository? commentRepository;
         private ITagRepository? tagRepository;
-        //private IRepository<PostTag>? postTagRepository;
+        private IRepository<PostTag>? postTagsRepository;
         private IRepository<UserRole>? userRoleRepository;
-        private IRepository<Role>? roleRepository;
+        private IRoleRepository? roleRepository;
 
         public IUserRepository Users
         {
             get
             {
-                if (userRepository == null)
-                    userRepository = new UserRepository(db);
+                userRepository ??= new UserRepository(db);
                 return userRepository;
             }
         }
@@ -30,28 +33,25 @@ namespace MyBlogFVV.DAL.Repositories
         {
             get
             {
-                if (tagRepository == null)
-                    tagRepository = new TagRepository(db);
+                tagRepository ??= new TagRepository(db);
                 return tagRepository;
             }
         }
-        /*
+        
         public IRepository<PostTag> PostTags
         {
             get
             {
-                if (postTagRepository == null)
-                    postTagRepository = new PostTagRepository(db);
-                return postTagRepository;
+                postTagsRepository ??= new PostTagsRepository(db);
+                return postTagsRepository;
             }
         }
-        */
+        
         public IPostRepository Posts
         {
             get
             {
-                if (postRepository == null)
-                    postRepository = new PostRepository(db);
+                postRepository ??= new PostRepository(db);
                 return postRepository;
             }
         }
@@ -60,8 +60,7 @@ namespace MyBlogFVV.DAL.Repositories
         {
             get
             {
-                if (commentRepository == null)
-                    commentRepository = new CommentRepository(db);
+                commentRepository ??= new CommentRepository(db);
                 return commentRepository;
             }
         }
@@ -69,17 +68,15 @@ namespace MyBlogFVV.DAL.Repositories
         {
             get
             {
-                if (userRoleRepository == null)
-                    userRoleRepository = new UserRoleRepository(db);
+                userRoleRepository ??= new UserRoleRepository(db);
                 return userRoleRepository;
             }
         }
-        public IRepository<Role> Roles
+        public IRoleRepository Roles
         {
             get
             {
-                if (roleRepository == null)
-                    roleRepository = new RoleRepository(db);
+                roleRepository ??= new RoleRepository(db);
                 return roleRepository;
             }
         }

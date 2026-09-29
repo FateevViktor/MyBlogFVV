@@ -1,6 +1,7 @@
 ﻿
 using MyBlogFVV.BLL.Models.Comment;
 using MyBlogFVV.BLL.Models.Post;
+using MyBlogFVV.BLL.Models.Tag;
 using MyBlogFVV.BLL.Models.User;
 using MyBlogFVV.DAL.Entities;
 
@@ -8,62 +9,71 @@ namespace MyBlogFVV.BLL.Services
 {
     internal class MyMappingPost
     {
-        public Post GetPostFromPostRequest(PostRequest postRequest)
+        public static Post GetPostFromPostRequest(PostRequest postRequest)
         {
-            Post post = new Post();
-            post.Title = postRequest.Title;
-            post.Text = postRequest.Text;
-            post.Date = postRequest.PostDate.ToString();
+            Post post = new()
+            {
+                Title = postRequest.Title,
+                Text = postRequest.Text,
+                Summary = postRequest.Summary,
+                Date = postRequest.PostDate.ToString()
+            };
 
             return post;
         }
-        public PostRequest GetPostRequestFromPost(Post post)
+        public static PostRequest GetPostRequestFromPost(Post post)
         {
-            PostRequest postRequest = new PostRequest();
-            postRequest.Id = post.PostId;
-            postRequest.Title = post.Title;
-            postRequest.Text = post.Text;          
+            PostRequest postRequest = new()
+            {
+                Id = post.PostId,
+                Title = post.Title,
+                Text = post.Text,
+                Summary = post.Summary
+            };
 
-            DateTime result;
-            if (DateTime.TryParse(post.Date, out result))
+            if (DateTime.TryParse(post.Date, out DateTime result))
             {
                 postRequest.PostDate = result;
             }
 
-            UserRequest userRequest = new UserRequest();
-            userRequest.Id = post.User.UserId;
-            userRequest.Login = post.User.Login;
-            userRequest.FirstName = post.User.FirstName;
-            userRequest.LastName = post.User.LastName;
-            userRequest.MiddleName = post.User.MiddleName;
-            DateTime resultUser;
-            if (DateTime.TryParse(post.User.BirthDate, out resultUser))
+            UserRequest userRequest = new();
+            if (post.User is not null)
             {
-                userRequest.BirthDate = resultUser;
+                userRequest.Id = post.User.UserId;
+                userRequest.Login = post.User.Login;
+                userRequest.FirstName = post.User.FirstName;
+                userRequest.LastName = post.User.LastName ?? string.Empty;
+                userRequest.MiddleName = post.User.MiddleName ?? string.Empty;
+                if (DateTime.TryParse(post.User.BirthDate, out DateTime resultUser))
+                {
+                    userRequest.BirthDate = resultUser;
+                }
+                userRequest.Email = post.User.Email;
+                postRequest.Author = userRequest;
             }
-            userRequest.Email = post.User.Email;
-            postRequest.Author = userRequest;
 
             //Заполним комментарии к посту
             foreach (var item in post.Comments)
             {
-                CommentRequest commentRequest = new CommentRequest();
-                commentRequest.Id = item.CommentId;
-                commentRequest.Text = item.Text;
-                DateTime result1;
-                if (DateTime.TryParse(item.Date, out result1))
+                CommentRequest commentRequest = new()
+                {
+                    Id = item.CommentId,
+                    Text = item.Text ?? string.Empty
+                };
+                if (DateTime.TryParse(item.Date, out DateTime result1))
                 {
                     commentRequest.CommentDate = result1;
                 }
 
                 //Автор
-                UserRequest userRequest1 = new UserRequest();
-                userRequest1.Id = item.User.UserId;
-                userRequest1.FirstName = item.User.FirstName;
-                userRequest1.LastName = item.User.LastName;
-                userRequest1.MiddleName = item.User.MiddleName;
-                DateTime result2;
-                if (DateTime.TryParse(item.Date, out result2))
+                UserRequest userRequest1 = new()
+                {
+                    Id = item.User.UserId,
+                    FirstName = item.User.FirstName,
+                    LastName = item.User.LastName ?? string.Empty,
+                    MiddleName = item.User.MiddleName ?? string.Empty
+                };
+                if (DateTime.TryParse(item.Date, out DateTime result2))
                 {
                     userRequest1.BirthDate = result2;
                 }
@@ -74,39 +84,54 @@ namespace MyBlogFVV.BLL.Services
                 postRequest.Comment.Add(commentRequest);
             }
 
+            //Заполним теги
+            foreach (var item in post.PostTags)
+            {
+                TagRequest tagRequest = new()
+                {
+                    Id = item.TagId,
+                    Text = item.Tag.Text ?? string.Empty
+                };
+                postRequest.Tag.Add(tagRequest);
+            }
+
             return postRequest;
         }
 
-        public List<PostRequest> GetListPostRequestFromListPost(List<Post> post)
+        public static List<PostRequest> GetListPostRequestFromListPost(List<Post> post)
         {
-            List<PostRequest> listPostRequest = new List<PostRequest>();
+            List<PostRequest> listPostRequest = [];
 
             foreach (var item in post)
             {
-                PostRequest postRequest = new PostRequest();
-                postRequest.Id = item.PostId;
-                postRequest.Title = item.Title;
-                postRequest.Text = item.Text;
-                DateTime result;
-                if (DateTime.TryParse(item.Date, out result))
+                PostRequest postRequest = new()
+                {
+                    Id = item.PostId,
+                    Title = item.Title,
+                    Text = item.Text,
+                    Summary = item.Summary
+                };
+                if (DateTime.TryParse(item.Date, out DateTime result))
                 {
                     postRequest.PostDate = result;
                 }
 
 
-                UserRequest userRequest = new UserRequest();
-                userRequest.Id = item.User.UserId;
-                userRequest.Login = item.User.Login;
-                userRequest.FirstName = item.User.FirstName;
-                userRequest.LastName = item.User.LastName;
-                userRequest.MiddleName = item.User.MiddleName;
-                DateTime resultUser;
-                if (DateTime.TryParse(item.User.BirthDate, out resultUser))
+                UserRequest userRequest = new();
+                if (item.User != null)
                 {
-                    userRequest.BirthDate = resultUser;
+                    userRequest.Id = item.User.UserId;
+                    userRequest.Login = item.User.Login;
+                    userRequest.FirstName = item.User.FirstName;
+                    userRequest.LastName = item.User.LastName ?? string.Empty;
+                    userRequest.MiddleName = item.User.MiddleName ?? string.Empty;
+                    if (DateTime.TryParse(item.User.BirthDate, out DateTime resultUser))
+                    {
+                        userRequest.BirthDate = resultUser;
+                    }
+                    userRequest.Email = item.User.Email;
+                    postRequest.Author = userRequest;
                 }
-                userRequest.Email = item.User.Email;
-                postRequest.Author = userRequest;
 
                 listPostRequest.Add(postRequest);
             }

@@ -1,4 +1,5 @@
 ﻿using MyBlogFVV.BLL.Models.Comment;
+using MyBlogFVV.BLL.Models.Tag;
 using MyBlogFVV.BLL.Models.User;
 
 namespace MyBlogFVV.BLL.Models.Post
@@ -10,7 +11,8 @@ namespace MyBlogFVV.BLL.Models.Post
         public UserRequest Author { get; set; } = new UserRequest();
         public string? Title { get; set; }
         public string? Text { get; set; }
+        public string? Summary { get; set; }
         public List<CommentRequest> Comment { get; set; } = new List<CommentRequest>();
-        //public List<TagRequest> Tag { get; set; } = new List<TagRequest>();
+        public List<TagRequest> Tag { get; set; } = new List<TagRequest>();
     }
 }

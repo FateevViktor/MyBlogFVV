@@ -1,0 +1,99 @@
+﻿@model MyBlogFVV.WEB.Models.Role.SearchRolesViewModel;
+
+<div class="ContentCenter">
+    <div>
+        <div>
+            <form asp-area="" asp-controller="Role" asp-action="RoleList" method="post">
+                <input class="ipt" type="number" placeholder="Поиск по Id" name="Id" />
+            </form>
+        </div>
+
+        <div>
+
+            @if (Model.RoleList.Count != 0)
+            {
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Роль</th>
+                            <th>Посмотреть</th>
+                            @if (User.Identity != null && User.IsInRole("Admin") == true)
+                            {
+                                <th>Удалить</th>
+                            }
+                            @if (User.Identity != null && User.IsInRole("Admin") == true)
+                            {
+                                <th>Редактировать</th>
+                            }
+                        </tr>
+                    </thead>
+                    @foreach (var item in @Model.RoleList)
+                    {
+                        <tbody>
+                            <tr>
+                                <!--Id-->
+                                <td>
+                                    @item.Id
+                                </td>
+                                <!--Тег-->
+                                <td>
+                                    @item.Title
+                                </td>
+                                <!--Посмотреть-->
+                                <td>
+                                    <form asp-controller="Role" asp-action="ShowRole" asp-route-roleId=@item.Id method="post">
+                                        <button type="submit" class="btn">
+                                            Посмотреть роль
+                                        </button>
+                                    </form>
+                                </td>
+                                @if (User.Identity != null && User.IsInRole("Admin") == true)
+                                {
+                                    <!--Кнопка удаления-->
+                                    <td>
+                                        <form asp-controller="Role" asp-action="Delete" asp-route-roleId=@item.Id method="post">
+                                            <button type="submit" class="btn">
+                                                Удалить роль
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                                @if (User.Identity != null && User.IsInRole("Admin") == true)
+                                {
+                                    <!--Кнопка редактирования-->
+                                    <td>
+                                        <form asp-controller="Role" asp-action="Edit" asp-route-roleId=@item.Id method="post">
+                                            <button type="submit" class="btn">
+                                                Редактировать роль
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    }
+                    <tfoot>
+                        <tr><td>Всего тегов </td><td>@Model.RoleList.Count</td></tr>
+                    </tfoot>
+                </table>
+            }
+            else
+            {
+                <label> Поиск не дал результатов.</label>
+            }
+        </div>
+
+        @if (User.Identity != null && User.IsInRole("Admin") == true)
+        {
+            <div>
+                <form asp-controller="Role" asp-action="Add" method="get">
+                    <button type="submit" class="btn">
+                        Добавить роль
+                    </button>
+                </form>
+            </div>
+        }
+
+    </div>
+</div>

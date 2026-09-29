@@ -5,33 +5,55 @@ namespace MyBlogFVV.BLL.Services
 {
     internal class MyMappingTag
     {
-        public Tag GetTagFromTagRequest(TagRequest tagRequest)
+        public static Tag GetTagFromTagRequest(TagRequest tagRequest)
         {
-            Tag tag = new Tag();
-            tag.TagId = tagRequest.Id;
-            tag.Text = tagRequest.Text;
+            Tag tag = new()
+            {
+                TagId = tagRequest.Id,
+                Text = tagRequest.Text
+            };
             return tag;
         }
-        public TagRequest GetTagRequestFromTag(Tag tag)
+        public static TagRequest GetTagRequestFromTag(Tag tag)
         {
-            TagRequest tagRequest = new TagRequest();
-            tagRequest.Id = tag.TagId;
-            tagRequest.Text = tag.Text;
+            TagRequest tagRequest = new()
+            {
+                Id = tag.TagId,
+                Text = tag.Text ?? string.Empty
+            };
             return tagRequest;
         }
-        public List<TagRequest> GetListTagRequestFromListTag(List<Tag> tag)
+        public static List<TagRequest> GetListTagRequestFromListTag(List<Tag> tag)
         {
-            List<TagRequest> listTagRequest = new List<TagRequest>();
+            List<TagRequest> listTagRequest = [];
 
             foreach (var item in tag)
             {
-                TagRequest tagRequest = new TagRequest();
-                tagRequest.Id = item.TagId;
-                tagRequest.Text = item.Text;
+                TagRequest tagRequest = new()
+                {
+                    Id = item.TagId,
+                    Text = item.Text ?? string.Empty
+                };
                 listTagRequest.Add(tagRequest);
             }
 
             return listTagRequest;
+        }
+        public static List<Tag> GetListTagFromListTagRequest(List<TagRequest> tagRequest)
+        {
+            List<Tag> listTag = [];
+
+            foreach (var item in tagRequest)
+            {
+                Tag tag = new()
+                {
+                    TagId = item.Id,
+                    Text = item.Text
+                };
+                listTag.Add(tag);
+            }
+
+            return listTag;
         }
     }
 }

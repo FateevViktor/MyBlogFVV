@@ -1,17 +1,10 @@
-﻿@inject IHttpContextAccessor HttpContextAccessor
-
-@{
-    var username = HttpContextAccessor.HttpContext.User.Identity.Name;
-    var roles = HttpContextAccessor.HttpContext.User.Claims.ToList();
-    var roles1 = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MyBlogFVV</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />    
 </head>
 <body>
     <header>
@@ -24,14 +17,14 @@
                 <a href="/">Главная страница</a>
                 <a href="/About">Страница About</a>
                 <a href="/Contacts">Контакты</a>
-                @if (username == null)
-                {
-                <a href="/User/Login">Войти</a>               
-                    <a href="/User/Register">Зарегистрироваться</a>
-                }
-                else
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
                     <a href="/User/MyPage">Мой профиль</a>
+                }
+                else
+                {      
+                    <a href="/User/Login">Войти</a>
+                    <a href="/User/Register">Зарегистрироваться</a>
                 }
             </nav>
         </div>

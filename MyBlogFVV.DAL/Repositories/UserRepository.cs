@@ -5,13 +5,9 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.DAL.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
-        private ApplicationDbContext db;
-        public UserRepository(ApplicationDbContext context)
-        {
-            this.db = context;
-        }
+        private readonly ApplicationDbContext db = context;
 
         public async Task<List<User>> GetAll()
         {
@@ -20,7 +16,8 @@ namespace MyBlogFVV.DAL.Repositories
 
         public async Task<User?> GetUserById(int id)
         {
-            return await db.Users.FindAsync(id);
+            User? user = await db.Users.Include(role => role.UserRoles).ThenInclude(role => role.Role).FirstOrDefaultAsync(p => p.UserId == id); //работает
+            return user;
         }
         public async Task<User?> GetUserByEmail(string item)
         {
@@ -39,19 +36,15 @@ namespace MyBlogFVV.DAL.Repositories
         }
         public async Task Create(User user)
         {
-            var foundRole = db.Roles.SingleOrDefault(role => role.Text == "User"); //вернет один элемент или null
-            if (foundRole == null)
-            {
-                throw new Exception(" Роль User не найдена ");
-            }
-            user.UserRoles = new List<UserRole>
-            {
+            var foundRole = db.Roles.SingleOrDefault(role => role.Title == "User") ?? throw new Exception(" Роль User не найдена "); //вернет один элемент или null
+            user.UserRoles =
+            [
                 new UserRole
                 {
                     User = user,
                     Role = foundRole
                 }
-            };
+            ];
             await db.Users.AddAsync(user);                
         }
 

@@ -1,11 +1,41 @@
-﻿@using MyBlogFVV.DAL.Entities
-@model User
+﻿@model MyBlogFVV.WEB.Models.Post.SearchPostsViewModel;
 @{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Ваше имя @Model?.FirstName Фаилия @Model?.LastName и почта @Model?.Email </p>
+<div class="ContentCenter" >
+    @foreach (var post in @Model.PostList)
+    {
+        <form class="PreviewPost" asp-controller="Post" asp-action="ShowPost" method="get">
+            <div hidden>
+                <input type='number' value=@post.Id name='id' /><br />
+            </div>
+            <div>
+                <img class="imgPreviewPost" src="/img/@post.Id.ToString()/@post.Id.ToString()-1.jpg">
+            </div>
+            <!--Заголовок статьи-->
+            <div>
+                <h2>@post.Title</h2>
+            </div>
+            <br />
+            <!--Краткое описание-->
+            <label>
+                @post.Summary
+            </label>
+            <br />
+            <!--Дата публикации-->
+            <label>
+                @post.PostDate?.ToShortDateString()
+            </label>
+            <br />
+            <!--Автор публикации-->
+            <label>
+                Автор статьи: @post.Author.LastName @post.Author.FirstName @post.Author.MiddleName
+            </label>
+            <br />
+            <button type="submit" class="btn">
+                Почитать статью
+            </button>
+        </form>
+    }
 </div>
+

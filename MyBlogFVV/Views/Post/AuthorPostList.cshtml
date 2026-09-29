@@ -1,0 +1,85 @@
+﻿@model MyBlogFVV.WEB.Models.Post.SearchPostsViewModel;
+
+<div class="ContentCenter">
+    <div>
+        <div>
+            @if (Model.PostList.Count != 0)
+            {
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Дата</th>
+                            <th>Название</th>
+                            <th>Почитать</th>
+                            <th>Удалить</th>
+                            <th>Редактировать</th>
+                        </tr>
+                    </thead>
+                    @foreach (var post in @Model.PostList)
+                    {
+                        <tbody>
+                            <tr>
+                                <!--Id-->
+                                <td>
+                                    @post.Id
+                                </td>
+                                <!--Дата-->
+                                <td>
+                                    @post.PostDate?.ToShortDateString()
+                                </td>
+                                <!--Заголовок-->
+                                <td>
+                                    @post.Title
+                                </td>
+                                <!--Кнопка почитать статью-->
+                                <td>
+                                    <form asp-controller="Post" asp-action="ShowPost" method="get">
+                                        <div hidden>
+                                            <input type='number' value=@post.Id name='id' /><br />
+                                        </div>
+                                        <button type="submit" class="btn">
+                                            Почитать статью
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <!--Кнопка удаления поста-->
+                                <td>
+                                    @if (User.Identity != null && (User.Identity.Name == post.Author.Login || User.IsInRole("Admin") == true))
+                                    {
+                                        <form asp-controller="Post" asp-action="Delete" asp-route-id=@post.Id method="post">
+                                            <button type="submit" class="btn">
+                                                Удалить статью
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+
+                                <!--Кнопка редактирования поста-->
+                                <td>
+                                    @if (User.Identity != null && (User.Identity.Name == post.Author.Login || User.IsInRole("Admin") == true || User.IsInRole("Moderator") == true))
+                                    {
+                                        <form asp-controller="Post" asp-action="Edit" asp-route-id=@post.Id method="post">
+                                            <button type="submit" class="btn">
+                                                Редактировать статью
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    }
+                    <tfoot>
+                        <tr><td>Всего статей </td><td>@Model.PostList.Count</td></tr>
+                    </tfoot>
+                </table>
+            }
+            else
+            {
+                <label> Поиск не дал результатов.</label>
+            }
+        </div>
+    </div>
+</div>

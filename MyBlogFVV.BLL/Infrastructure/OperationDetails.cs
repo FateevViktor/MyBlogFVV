@@ -4,16 +4,10 @@ namespace MyBlogFVV.BLL.Infrastructure
     /// <summary>
     /// Класс хранит информацию об успешности опирации
     /// </summary>
-    public class OperationDetails
+    public class OperationDetails(bool succedeed, string message, string prop)
     {
-        public OperationDetails(bool succedeed, string message, string prop)
-        {
-            Succedeed = succedeed;
-            Message = message;
-            Property = prop;
-        }
-        public bool Succedeed { get; private set; }
-        public string Message { get; private set; }
-        public string Property { get; private set; }
+        public bool Succedeed { get; private set; } = succedeed;
+        public string Message { get; private set; } = message;
+        public string Property { get; private set; } = prop;
     }
 }

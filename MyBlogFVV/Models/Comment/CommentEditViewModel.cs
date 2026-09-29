@@ -11,11 +11,14 @@ namespace MyBlogFVV.WEB.Models.Comment
 
         [Required]
         [Display(Name = "Дата комментария")]
-        [DataType(DataType.Date)] //Указываем, что нам нужна только дата
+        [DataType(DataType.DateTime)] //Указываем, что нам нужна дата и время
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime CommentDate { get; set; }
 
         [Required]
         [Display(Name = "Текст комментария")]
+        [DataType(DataType.MultilineText)] //многострочный текст
         public string Text { get; set; } = string.Empty;
     }
 }

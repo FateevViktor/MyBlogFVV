@@ -13,16 +13,11 @@ namespace MyBlogFVV.WEB.Controllers
     [Route("Comment")]
     [Authorize]
     //[Authorize(Policy = "OnlyForRoleAdmin")]
-    public class CommentController : Controller
+    public class CommentController(ICommentService commentService, IUserService userService) : Controller
     {
-        MyMappingComment myMappingComment = new MyMappingComment();
-        ICommentService _commentService;
-        IUserService _userService;
-        public CommentController(ICommentService commentService, IUserService userService)
-        {
-            _commentService = commentService;
-            _userService = userService;
-        }
+        readonly ICommentService _commentService = commentService;
+        readonly IUserService _userService = userService;
+
         public IActionResult Index()
         {
             return View();
@@ -33,7 +28,7 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            CommentViewModel commentViewModel = new CommentViewModel();
+            CommentViewModel commentViewModel = new();
             return View(commentViewModel);
         }
         /*
@@ -64,11 +59,11 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(string text, string login, int postId)
         {
-            CommentViewModel commentViewModel = new CommentViewModel();
-            if (login.Count()>0 && postId > 0 && text.Count()>0)
+            CommentViewModel commentViewModel = new();
+            if (login.Length>0 && postId > 0 && text.Length>0)
             {                
                 //Найдем автора
-                UserRequest? userRequest = new UserRequest();
+                UserRequest? userRequest;
                 userRequest = await _userService.GetUserByLogin(login);
                 if (userRequest != null)
                 {
@@ -77,7 +72,7 @@ namespace MyBlogFVV.WEB.Controllers
                     commentViewModel.Author.Id = userRequest.Id;
                     commentViewModel.Post.Id = postId;
 
-                    CommentRequest commentRequest = myMappingComment.GetCommentRequestFromCommentViewModel(commentViewModel);
+                    CommentRequest commentRequest = MyMappingComment.GetCommentRequestFromCommentViewModel(commentViewModel);
 
                     OperationDetails result = await _commentService.Create(commentRequest);
                     if (result.Succedeed == true)
@@ -102,15 +97,15 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int commentId)
         {
-            CommentEditViewModel commentEditViewModel = new CommentEditViewModel();
-            CommentRequest? commentRequest = new CommentRequest();
+            CommentEditViewModel commentEditViewModel;
+            CommentRequest? commentRequest;
             if (commentId > 0)
             {
                 commentRequest = await _commentService.GetCommentById(commentId);
 
                 if (commentRequest != null)
                 {
-                    commentEditViewModel = myMappingComment.GetCommentEditViewModelFromCommentRequest(commentRequest);
+                    commentEditViewModel = MyMappingComment.GetCommentEditViewModelFromCommentRequest(commentRequest);
                     return View("Edit", commentEditViewModel);
                 }
             }
@@ -120,12 +115,12 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUpdate(CommentEditViewModel model)
         {
-            CommentRequest? commentRequest = new CommentRequest();
+            CommentRequest? commentRequest;
             if (ModelState.IsValid)
             {
                 if (model != null)
                 {
-                    commentRequest = myMappingComment.GetCommentRequestFromCommentEditViewModel(model);
+                    commentRequest = MyMappingComment.GetCommentRequestFromCommentEditViewModel(model);
                     OperationDetails result = await _commentService.Update(commentRequest);
                     if (result.Succedeed == true)
                     {
@@ -172,11 +167,11 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> CommentList()
         {
-            SearchCommentsViewModel searchCommentsViewModel = new SearchCommentsViewModel();
+            SearchCommentsViewModel searchCommentsViewModel = new();
             List<CommentRequest> commentList = await _commentService.GetAll();
             if (commentList != null)
             {
-                searchCommentsViewModel = myMappingComment.GetSearchCommentsViewModelFromListCommentRequest(commentList);
+                searchCommentsViewModel = MyMappingComment.GetSearchCommentsViewModelFromListCommentRequest(commentList);
             }
             return View("CommentList", searchCommentsViewModel);
         }
@@ -185,16 +180,16 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> CommentList(int Id)
         {
-            SearchCommentsViewModel searchCommentsViewModel = new SearchCommentsViewModel();
+            SearchCommentsViewModel searchCommentsViewModel;
             if (Id > 0)
             {
-                CommentRequest? commentRequest = new CommentRequest();
+                CommentRequest? commentRequest;
                 commentRequest = await _commentService.GetCommentById(Id);
-                List<CommentRequest> commentList = new List<CommentRequest>();
+                List<CommentRequest> commentList = [];
                 if (commentRequest != null)
                 {
                     commentList.Add(commentRequest);
-                    searchCommentsViewModel = myMappingComment.GetSearchCommentsViewModelFromListCommentRequest(commentList);
+                    searchCommentsViewModel = MyMappingComment.GetSearchCommentsViewModelFromListCommentRequest(commentList);
                     return View("CommentList", searchCommentsViewModel);
                 }
                 else
@@ -205,6 +200,32 @@ namespace MyBlogFVV.WEB.Controllers
             else
             {
                 return RedirectToAction("CommentList");
+            }
+        }
+        //------------------------------------------------
+        //----------Сприсок комментариев автора-----------------
+        [Route("AuthorCommentList")]
+        [HttpGet]
+        public async Task<IActionResult> AuthorCommentList(int Id)
+        {
+            SearchCommentsViewModel searchCommentsViewModel;
+            if (Id > 0)
+            {
+                List<CommentRequest> commentList = await _commentService.GetAllUser(Id);
+
+                if (commentList != null)
+                {
+                    searchCommentsViewModel = MyMappingComment.GetSearchCommentsViewModelFromListCommentRequest(commentList);
+                    return View("AuthorCommentList", searchCommentsViewModel);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
             }
         }
         //------------------------------------------------

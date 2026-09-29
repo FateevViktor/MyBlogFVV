@@ -2,6 +2,6 @@
 {
     public class SearchUsersViewModel
     {
-        public List<UserViewModel> UserList { get; set; } = new List<UserViewModel>();
+        public List<UserViewModel> UserList { get; set; } = [];
     }
 }

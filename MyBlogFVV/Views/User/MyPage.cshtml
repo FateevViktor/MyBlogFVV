@@ -25,7 +25,7 @@
         <!--Информация обо мне-->
         <p>Логин: @Model?.Login</p>
         <p>ФИО: @Model?.LastName @Model?.FirstName @Model?.MiddleName</p>
-        <p>Дата рождения: @Model?.BirthdayDate.ToString()</p>
+        <p>Дата рождения: @Model?.BirthdayDate?.ToShortDateString()</p>
         <p>Email: @Model?.Email</p>
         
         <!--Добавить статью-->
@@ -70,6 +70,15 @@
             <form asp-controller="Tag" asp-action="TagList" method="get">
                 <button type="submit" class="btn">
                     Работа с тегами
+                </button>
+            </form>
+        </div>
+
+        <!--Роли-->
+        <div>
+            <form asp-controller="Role" asp-action="RoleList" method="get">
+                <button type="submit" class="btn">
+                    Работа с ролями
                 </button>
             </form>
         </div>

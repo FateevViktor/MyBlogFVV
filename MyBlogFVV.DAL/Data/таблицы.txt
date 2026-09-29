@@ -42,7 +42,8 @@ CREATE TABLE PostTags (
 
 CREATE TABLE Roles (
 	RoleId	     INTEGER PRIMARY KEY AUTOINCREMENT,
-	Text         TEXT
+	Title TEXT,
+        Description TEXT
 	);
 
 CREATE TABLE UserRoles (
@@ -110,11 +111,25 @@ VALUES ('8', '1');
 INSERT INTO Tags (Text)
 VALUES ('Нет тега');
 
+-- Вставка одной записи 
+INSERT INTO Roles (Title, Description)
+VALUES ('User', 'Может удалять и изменять только свой контент');
+
+-- Вставка одной записи
+INSERT INTO PostTags (PostId, TagId)
+VALUES ('4', '1');
+
 --Добавить поле (столбец)
 ALTER TABLE Posts ADD COLUMN Date TEXT;
+--Добавить поле (столбец)
+ALTER TABLE Posts ADD COLUMN Summary TEXT;
 
 --Добавить поле (столбец)
 ALTER TABLE Posts ADD COLUMN Title TEXT;
+--Добавить поле (столбец)
+ALTER TABLE Roles ADD COLUMN Title TEXT;
+--Добавить поле (столбец)
+ALTER TABLE Roles ADD COLUMN Description TEXT;
 
 --Удалить таблицу из БД
 DROP TABLE Comments
@@ -122,9 +137,21 @@ DROP TABLE Comments
 DROP TABLE PostTags
 --Удалить таблицу из БД
 DROP TABLE Tags
+--Удалить столбец из БД
+ALTER TABLE Roles DROP COLUMN Text;
 
 --Изменить запись в 
 UPDATE Posts SET Title = 'Заголовок первого поста' WHERE PostId = 1;
+--Изменить запись в 
+UPDATE Roles SET Title = 'User' WHERE RoleId = 1;
+--Изменить запись в 
+UPDATE Roles SET Title = 'Admin' WHERE RoleId = 2;
+--Изменить запись в 
+UPDATE Roles SET Title = 'Moderator' WHERE RoleId = 3;
+--Изменить запись в 
+UPDATE Roles SET Description = 'Может удалять и изменять только свой контент.' WHERE RoleId = 1;
+--Изменить запись в 
+UPDATE Roles SET Description = 'Может редактировать статьи и комментарии любого автора.' WHERE RoleId = 3;
 
 --Проверить связи во всей БД
 PRAGMA foreign_key_check;

@@ -5,14 +5,9 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.DAL.Repositories
 {
-    public class PostRepository : IPostRepository
+    public class PostRepository(ApplicationDbContext context) : IPostRepository
     {
-        private ApplicationDbContext db;
-
-        public PostRepository(ApplicationDbContext context)
-        {
-            this.db = context;
-        }
+        private readonly ApplicationDbContext db = context;
 
         public async Task<List<Post>> GetAll()
         {
@@ -21,13 +16,16 @@ namespace MyBlogFVV.DAL.Repositories
         }
         public async Task<List<Post>> GetAll(int id)
         {
-            List<Post> x = await db.Posts.Include(a => a.User).Where(a => a.User.UserId == id).ToListAsync();
+            List<Post> x = await db.Posts.Include(a => a.User).Where(a => a.User != null && a.User.UserId == id).ToListAsync();
             return x;
         }
 
-        public async Task<Post> Get(int id) //Ищем статью по её Id
+        public async Task<Post?> Get(int id) //Ищем статью по её Id
         {
-            Post? x = await db.Posts.Include(u => u.User).Include(u => u.Comments).ThenInclude(u => u.User).FirstOrDefaultAsync(u => u.PostId == id);
+            Post? x = await db.Posts.Include(u => u.User)
+                                    .Include(u => u.Comments).ThenInclude(u => u.User)
+                                    .Include(u => u.PostTags).ThenInclude(u => u.Tag)
+                                    .FirstOrDefaultAsync(u => u.PostId == id);
             return x;
         }
 

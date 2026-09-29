@@ -1,16 +1,24 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using MyBlogFVV.BLL.Interfaces;
 using MyBlogFVV.BLL.Services;
+using MyBlogFVV.DAL.EF;
 using MyBlogFVV.DAL.Interfaces;
 using MyBlogFVV.DAL.Repositories;
 using System.Security.Claims;
-namespace MyBlogFVV
+namespace MyBlogFVV.WEB
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            //Настройки подключения к БД
+            var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+            //Контекст БД
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));
 
             builder.Services.AddHttpContextAccessor();
 
@@ -23,6 +31,7 @@ namespace MyBlogFVV
                     options.Cookie.Name = "authCookie";
                     options.AccessDeniedPath = "/AccessDanied"; //путь к странице с информацией о запрете доступа
                 });
+
             //подключаем серсив авторизации
             builder.Services.AddAuthorization(opts => {
 
@@ -46,11 +55,20 @@ namespace MyBlogFVV
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<ITagService, TagService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+            //Задал культуру
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("ru-RU"), // Явная культура
+            });
+            //перенаправим если страницу не нашли
+            app.UseStatusCodePagesWithRedirects("NotFoundContent");
+
             app.UseAuthentication();
 
             // Configure the HTTP request pipeline.

@@ -1,4 +1,4 @@
-namespace MyBlogFVV.Models
+namespace MyBlogFVV.WEB.Models
 {
     public class ErrorViewModel
     {

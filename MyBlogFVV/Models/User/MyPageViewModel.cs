@@ -1,6 +1,4 @@
-﻿using MyBlogFVV.WEB.Models.Comment;
-using MyBlogFVV.WEB.Models.Post;
-using MyBlogFVV.WEB.Models.Tag;
+﻿using MyBlogFVV.WEB.Models.Post;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyBlogFVV.WEB.Models.User
@@ -33,9 +31,9 @@ namespace MyBlogFVV.WEB.Models.User
         [DataType(DataType.Date)] //Указываем, что нам нужна только дата
         public DateTime? BirthdayDate { get; set; }
 
-        public List<PostViewModel> Posts { get; set; } = new List<PostViewModel>();
+        public List<PostViewModel> Posts { get; set; } = [];
         //public List<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
         //public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
-        public List<string> Roles { get; set; } = new List<string>();
+        public List<string> Roles { get; set; } = [];
     }
 }

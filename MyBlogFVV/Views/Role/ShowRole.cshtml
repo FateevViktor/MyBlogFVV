@@ -1,0 +1,14 @@
+﻿@model MyBlogFVV.WEB.Models.Role.RoleViewModel
+
+@{
+    ViewData["Title"] = "ShowRole";
+}
+<div class="ContentCenter">
+    <label>Id: @Model.Id.ToString()</label>
+    <br />
+    <label>Роль: @Model.Title</label>
+    <br />
+    <label>Описание роли: @Model.Description</label>
+    <br />
+    <a href="/Role/RoleList">Перейти к списку ролей</a>
+</div>

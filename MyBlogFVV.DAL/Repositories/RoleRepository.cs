@@ -6,41 +6,40 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.DAL.Repositories
 {
-    internal class RoleRepository : IRepository<Role>
+    internal class RoleRepository(ApplicationDbContext context) : IRoleRepository
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db = context;
 
-        public RoleRepository(ApplicationDbContext context)
+        public async Task Create(Role item)
         {
-            this.db = context;
+            await db.Roles.AddAsync(item);
         }
 
-        public List<Role>? GetAll()
+        public void Delete(Role item)
         {
-            List<Role>? x = db.Roles.ToList();
+            db.Roles.Remove(item);
+        }
+
+        public async Task<List<Role>> GetAll()
+        {
+            List<Role>? x = await db.Roles.ToListAsync();
             return x;
         }
 
-        public Role? Get(int id)
+        public async Task<Role?> GetRoleById(int idRole)
         {
-            return db.Roles.Find(id);
+            Role? x = await db.Roles.FindAsync(idRole);
+            return x;
+        }
+        public async Task<Role?> GetRoleByText(string text)
+        {
+            Role? x = await db.Roles.Where(a => a.Title == text).FirstOrDefaultAsync();
+            return x;
         }
 
-        public void Create(Role role)
+        public void Update(Role item)
         {
-            db.Roles.Add(role);
-        }
-
-        public void Update(Role role)
-        {
-            db.Entry(role).State = EntityState.Modified;
-        }
-
-        public void Delete(int id)
-        {
-            Role? role = db.Roles.Find(id);
-            if (role != null)
-                db.Roles.Remove(role);
+            db.Entry(item).State = EntityState.Modified;
         }
     }
 }

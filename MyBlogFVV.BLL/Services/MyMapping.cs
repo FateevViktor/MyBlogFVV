@@ -10,30 +10,31 @@ namespace MyBlogFVV.BLL.Services
 
         }
 
-        public User GetUserFromRegisterRequest(RegisterRequest registerRequest)
+        public static User GetUserFromRegisterRequest(RegisterRequest registerRequest)
         {
-            User user = new User();
-
-            user.FirstName = registerRequest.FirstName;
-            user.LastName = registerRequest.LastName;
-            user.MiddleName = registerRequest.MiddleName;
-            user.BirthDate = registerRequest.BirthDate.ToShortDateString();
-            user.Email = registerRequest.Email;
-            user.Login = registerRequest.Login;
-            user.Password = registerRequest.Password;
+            User user = new()
+            {
+                FirstName = registerRequest.FirstName,
+                LastName = registerRequest.LastName,
+                MiddleName = registerRequest.MiddleName,
+                BirthDate = registerRequest.BirthDate.ToShortDateString(),
+                Email = registerRequest.Email,
+                Login = registerRequest.Login,
+                Password = registerRequest.Password
+            };
 
             return user;
         }
-        public UserRequest GetUserRequestFromUser(User user)
+        public static UserRequest GetUserRequestFromUser(User user)
         {
-            UserRequest userRequest = new UserRequest();
-
-            userRequest.Id = user.UserId;
-            userRequest.FirstName = user.FirstName;
-            userRequest.LastName = user.LastName;
-            userRequest.MiddleName = user.MiddleName;
-            DateTime result;
-            if (DateTime.TryParse(user.BirthDate, out result))
+            UserRequest userRequest = new()
+            {
+                Id = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName ?? string.Empty,
+                MiddleName = user.MiddleName ?? string.Empty
+            };
+            if (DateTime.TryParse(user.BirthDate, out DateTime result))
             {
                 userRequest.BirthDate = result;
             }
@@ -42,27 +43,28 @@ namespace MyBlogFVV.BLL.Services
             
             foreach (var role in user.UserRoles)
             {
-                if (role != null)
+                if (role.Role.Title!=null)
                 {
-                    userRequest.Roles.Add(role.Role.Text);
+                    userRequest.Roles.Add(role.Role.Title);
                 }
             }
             
             return userRequest;
         }
-        public List<UserRequest> GetListUserRequestFromListUser(List<User> user)
+        public static List<UserRequest> GetListUserRequestFromListUser(List<User> user)
         {            
-            List<UserRequest> listUserRequest = new List<UserRequest>();
+            List<UserRequest> listUserRequest = [];
 
             foreach (var item in user)
             {
-                UserRequest userRequest = new UserRequest();
-                userRequest.Id = item.UserId;
-                userRequest.FirstName = item.FirstName;
-                userRequest.LastName = item.LastName;
-                userRequest.MiddleName = item.MiddleName;
-                DateTime result;
-                if (DateTime.TryParse(item.BirthDate, out result))
+                UserRequest userRequest = new()
+                {
+                    Id = item.UserId,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName ?? string.Empty,
+                    MiddleName = item.MiddleName ?? string.Empty
+                };
+                if (DateTime.TryParse(item.BirthDate, out DateTime result))
                 {
                     userRequest.BirthDate = result;
                 }
@@ -71,9 +73,9 @@ namespace MyBlogFVV.BLL.Services
 
                 foreach (var role in item.UserRoles)
                 {
-                    if (role != null)
+                    if (role.Role.Title != null)
                     {
-                        userRequest.Roles.Add(role.Role.Text);
+                        userRequest.Roles.Add(role.Role.Title);
                     }
                 }
                 listUserRequest.Add(userRequest);
@@ -81,15 +83,16 @@ namespace MyBlogFVV.BLL.Services
 
             return listUserRequest;
         }
-        public User GetUserFromUserEditRequest(UserEditRequest userEditRequest)
+        public static User GetUserFromUserEditRequest(UserEditRequest userEditRequest)
         {
-            User user = new User();
-
-            user.FirstName = userEditRequest.FirstName;
-            user.LastName = userEditRequest.LastName;
-            user.MiddleName = userEditRequest.MiddleName;
-            user.Email = userEditRequest.Email;
-            user.BirthDate = userEditRequest.BirthDate.ToShortDateString();
+            User user = new()
+            {
+                FirstName = userEditRequest.FirstName,
+                LastName = userEditRequest.LastName,
+                MiddleName = userEditRequest.MiddleName,
+                Email = userEditRequest.Email,
+                BirthDate = userEditRequest.BirthDate.ToShortDateString()
+            };
 
             return user;
         }

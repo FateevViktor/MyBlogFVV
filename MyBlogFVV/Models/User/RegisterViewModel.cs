@@ -23,7 +23,7 @@ namespace MyBlogFVV.WEB.Models.User
         [Display(Name = "Дата рождения")]
         //[Required(ErrorMessage = "Вам необходимо ввести дату рождения")]
         [DataType(DataType.Date)] //Указываем, что нам нужна только дата
-        public DateTime? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "Вам необходимо ввести пароль")]
         [DataType(DataType.Password)]

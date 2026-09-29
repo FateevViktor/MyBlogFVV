@@ -7,14 +7,10 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.BLL.Services
 {
-    public class PostService : IPostService
+    public class PostService(IUnitOfWork uow) : IPostService
     {
-        IUnitOfWork Database { get; set; }
-        MyMappingPost myMappingPost = new MyMappingPost();
-        public PostService(IUnitOfWork uow)
-        {
-            Database = uow;
-        }
+        IUnitOfWork Database { get; set; } = uow;
+
         //Создаем статью
         public async Task<OperationDetails> Create(PostRequest postRequest)
         {
@@ -28,10 +24,27 @@ namespace MyBlogFVV.BLL.Services
                 User? user = await Database.Users.GetUserById(postRequest.Author.Id);
                 if (user is not null)
                 {
-                    Post post = myMappingPost.GetPostFromPostRequest(postRequest);
+                    Post post = MyMappingPost.GetPostFromPostRequest(postRequest);
                     post.User = user;
+                    
+                    foreach (var item in postRequest.Tag)
+                    {
+                        Tag? tag;
+                        tag = await Database.Tags.GetTagById(item.Id);
+                        if (tag is not null)
+                        {
+                            PostTag postTag = new()
+                            {
+                                Post = post,
+                                Tag = tag
+                            };
+                            post.PostTags.Add(postTag);
+                        }
+                    }
+
                     await Database.Posts.Create(post);
                     await Database.Save();
+
                     return new OperationDetails(true, "Пост создан", "MessageOperationDetails");
                 }
                 else
@@ -43,33 +56,33 @@ namespace MyBlogFVV.BLL.Services
         //получить все статьи
         public async Task<List<PostRequest>> GetAll()
         {
-            List<PostRequest>? postRequest = new List<PostRequest>();
+            List<PostRequest>? postRequest = [];
             List<Post>? posts = await Database.Posts.GetAll();
             if (posts != null)
             {
-                postRequest = myMappingPost.GetListPostRequestFromListPost(posts);
+                postRequest = MyMappingPost.GetListPostRequestFromListPost(posts);
             }
             return postRequest;
         }
         //получить все статьи определенного автора
         public async Task<List<PostRequest>> GetAll(int id)
         {
-            List<PostRequest>? postRequest = new List<PostRequest>();
+            List<PostRequest>? postRequest = [];
             List<Post>? posts = await Database.Posts.GetAll(id);
             if (posts != null)
             {
-                postRequest = myMappingPost.GetListPostRequestFromListPost(posts);
+                postRequest = MyMappingPost.GetListPostRequestFromListPost(posts);
             }
             return postRequest;
         }
-        public async Task<PostRequest> GetPostById(int id) //Получить статью по Id
+        public async Task<PostRequest?> GetPostById(int id) //Получить статью по Id
         {
             PostRequest? postRequest = null;
             //Проверим, есть ли данный Id в базе
             Post? postСheck = await Database.Posts.Get(id);
             if (postСheck != null)
             {
-                postRequest = myMappingPost.GetPostRequestFromPost(postСheck);
+                postRequest = MyMappingPost.GetPostRequestFromPost(postСheck);
             }
             return postRequest;
         }
@@ -83,8 +96,26 @@ namespace MyBlogFVV.BLL.Services
             }
             //Теперь пробежимся по тем полям, которые изменились...
             if (postRequest.Text != postСheck.Text) postСheck.Text = postRequest.Text;
-            if (postRequest.Title != postСheck.Title) postСheck.Title = postRequest.Title;            
+            if (postRequest.Title != postСheck.Title) postСheck.Title = postRequest.Title;
+            if (postRequest.Summary != postСheck.Summary) postСheck.Summary = postRequest.Summary;
             if (postRequest.PostDate.ToString() != postСheck.Date) postСheck.Date = postRequest.PostDate.ToString();
+            
+            postСheck.PostTags.Clear(); //очистили 
+            //теперь заполним
+            foreach (var item in postRequest.Tag)
+            {
+                Tag? tag;
+                tag = await Database.Tags.GetTagById(item.Id);
+                if (tag != null)
+                {
+                    PostTag postTag = new()
+                    {
+                        Post = postСheck,
+                        Tag = tag
+                    };
+                    postСheck.PostTags.Add(postTag);
+                }
+            }
 
             Database.Posts.Update(postСheck);
             await Database.Save();
@@ -108,6 +139,7 @@ namespace MyBlogFVV.BLL.Services
         public void Dispose()
         {
             Database.Dispose();
+            GC.SuppressFinalize(this); // Блокируем вызов финализатора
         }
     }
 }

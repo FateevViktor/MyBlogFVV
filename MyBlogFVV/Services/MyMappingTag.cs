@@ -5,47 +5,83 @@ namespace MyBlogFVV.WEB.Services
 {
     internal class MyMappingTag
     {
-        public TagRequest GetTagRequestFromTagViewModel(TagViewModel tagViewModel)
+        public static TagRequest GetTagRequestFromTagViewModel(TagViewModel tagViewModel)
         {
-            TagRequest tagRequest = new TagRequest();
-            tagRequest.Id = tagViewModel.Id;
-            tagRequest.Text = tagViewModel.Text;
+            TagRequest tagRequest = new()
+            {
+                Id = tagViewModel.Id,
+                Text = tagViewModel.Text
+            };
             return tagRequest;
         }
-        public TagViewModel GetTagViewModelFromTagRequest(TagRequest tagRequest)
+        public static TagViewModel GetTagViewModelFromTagRequest(TagRequest tagRequest)
         {
-            TagViewModel tagViewModel = new TagViewModel();
-            tagViewModel.Id = tagRequest.Id;
-            tagViewModel.Text = tagRequest.Text;
+            TagViewModel tagViewModel = new()
+            {
+                Id = tagRequest.Id,
+                Text = tagRequest.Text
+            };
             return tagViewModel;
         }
-        public SearchTagsViewModel GetSearchTagsViewModelFromListTagRequest(List<TagRequest> tagRequest)
+        public static SearchTagsViewModel GetSearchTagsViewModelFromListTagRequest(List<TagRequest> tagRequest)
         {
-            SearchTagsViewModel searchTagsViewModel = new SearchTagsViewModel();
+            SearchTagsViewModel searchTagsViewModel = new();
             foreach (var item in tagRequest)
             {
-                TagViewModel tagViewModel = new TagViewModel();
-
-                tagViewModel.Id = item.Id;
-                tagViewModel.Text = item.Text;
+                TagViewModel tagViewModel = new()
+                {
+                    Id = item.Id,
+                    Text = item.Text
+                };
 
                 searchTagsViewModel.TagList.Add(tagViewModel);
             }
             return searchTagsViewModel;
         }
-        public TagEditViewModel GetTagEditViewModelFromTagRequest(TagRequest tagRequest)
+        public static TagEditViewModel GetTagEditViewModelFromTagRequest(TagRequest tagRequest)
         {
-            TagEditViewModel tagEditViewModel = new TagEditViewModel();
-            tagEditViewModel.Id = tagRequest.Id;
-            tagEditViewModel.Text = tagRequest.Text;
+            TagEditViewModel tagEditViewModel = new()
+            {
+                Id = tagRequest.Id,
+                Text = tagRequest.Text
+            };
             return tagEditViewModel;
         }
-        public TagRequest GetTagRequestFromTagEditViewModel(TagEditViewModel tagEditViewModel)
+        public static TagRequest GetTagRequestFromTagEditViewModel(TagEditViewModel tagEditViewModel)
         {
-            TagRequest tagRequest = new TagRequest();
-            tagRequest.Id = tagEditViewModel.Id;
-            tagRequest.Text = tagEditViewModel.Text;
+            TagRequest tagRequest = new()
+            {
+                Id = tagEditViewModel.Id,
+                Text = tagEditViewModel.Text
+            };
             return tagRequest;
         }
+        public static TagCheckedViewModel GetTagCheckedViewModelFromTagRequest(TagRequest tagRequest)
+        {
+            TagCheckedViewModel tagCheckedViewModel = new()
+            {
+                Id = tagRequest.Id,
+                Text = tagRequest.Text,
+                Checked = false
+            };
+            return tagCheckedViewModel;
+        }
+        public static List<TagCheckedViewModel> GetListTagCheckedViewModelFromListTagRequest(List<TagRequest> tagRequest)
+        {
+            List<TagCheckedViewModel> listTagCheckedViewModel = [];
+            foreach (var item in tagRequest)
+            {
+                TagCheckedViewModel tagCheckedViewModel = new()
+                {
+                    Id = item.Id,
+                    Text = item.Text,
+                    Checked = false
+                };
+
+                listTagCheckedViewModel.Add(tagCheckedViewModel);
+            }
+            return listTagCheckedViewModel;
+        }
+
     }
 }

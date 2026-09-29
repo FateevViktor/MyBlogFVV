@@ -6,34 +6,28 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.DAL.Repositories
 {
-    internal class UserRoleRepository : IRepository<UserRole>
+    internal class UserRoleRepository(ApplicationDbContext context) : IRepository<UserRole>
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db = context;
 
-        public UserRoleRepository(ApplicationDbContext context)
+        public async Task<List<UserRole>> GetAll()
         {
-            this.db = context;
-        }
-
-        public List<UserRole>? GetAll()
-        {
-            //myMapping = 
-            List<UserRole>? userRoles = null;
-            userRoles = db.UserRoles.ToList();
+            List<UserRole>? userRoles;
+            userRoles = await db.UserRoles.ToListAsync();
 
             return userRoles;
         }
 
-        public UserRole? Get(int id)
+        public async Task<UserRole?> Get(int id)
         {
-            UserRole? userRole = null;
-            userRole = db.UserRoles.Find(id);
+            UserRole? userRole;
+            userRole = await db.UserRoles.FindAsync(id);
             return userRole;
         }
 
-        public void Create(UserRole userRole)
+        public async Task Create(UserRole userRole)
         {
-            db.UserRoles.Add(userRole);
+            await db.UserRoles.AddAsync(userRole);
         }
 
         public void Update(UserRole userRole)

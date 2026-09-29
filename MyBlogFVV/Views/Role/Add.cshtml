@@ -1,0 +1,24 @@
+﻿@model MyBlogFVV.WEB.Models.Role.RoleViewModel
+
+@{
+    ViewData["Title"] = "RoleAdd";
+}
+
+<div class="ContentCenter">
+    <h2>Создание новой роли</h2>
+    <form method="post" asp-controller="Role" asp-action="Add">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Title"></label><br />
+            <input asp-for="Title" />
+        </div>
+        <div>
+            <label asp-for="Description"></label><br />
+            <input asp-for="Description" />
+        </div>
+        <div>
+            <input class="btn" type="submit" value="Создать роль" />
+        </div>
+    </form>
+    <a href="/Tag/TagList">Перейти к списку всех тегов</a>
+</div>

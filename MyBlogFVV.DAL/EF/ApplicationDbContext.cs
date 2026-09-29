@@ -12,12 +12,10 @@ namespace MyBlogFVV.DAL.EF
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
-        
 
-        private const string connectionString = "Data Source=../MyBlogFVV.DAL/Data/MyBlogFVV.db";
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            optionsBuilder.UseSqlite(connectionString);
+            //Database.EnsureCreated();
         }
     }
 }

@@ -5,31 +5,32 @@ namespace MyBlogFVV.WEB.Services
 {
     public class MyMapping
     {
-        public RegisterRequest GetRegisterRequestFromRegisterViewModel(RegisterViewModel registerViewModel)
+        public static RegisterRequest GetRegisterRequestFromRegisterViewModel(RegisterViewModel registerViewModel)
         {
-            RegisterRequest registerRequest = new RegisterRequest();
-
-            registerRequest.FirstName = registerViewModel.FirstName;
-            registerRequest.LastName = registerViewModel.LastName;
-            registerRequest.MiddleName = registerViewModel.MiddleName;
-            registerRequest.Email = registerViewModel.Email;
-
-            registerRequest.BirthDate = (DateTime)registerViewModel.BirthDate;            
-            registerRequest.Password = registerViewModel.Password;
-            registerRequest.Login = registerViewModel.Login;
+            RegisterRequest registerRequest = new()
+            {
+                FirstName = registerViewModel.FirstName,
+                LastName = registerViewModel.LastName ?? string.Empty,
+                MiddleName = registerViewModel.MiddleName ?? string.Empty,
+                Email = registerViewModel.Email,
+                BirthDate = /*(DateTime)*/registerViewModel.BirthDate,
+                Password = registerViewModel.Password,
+                Login = registerViewModel.Login
+            };
 
             return registerRequest;
         }
-        public MyPageViewModel GetMyPageViewModelFromUserRequest(UserRequest userRequest)
+        public static MyPageViewModel GetMyPageViewModelFromUserRequest(UserRequest userRequest)
         {
-            MyPageViewModel myPageViewModel = new MyPageViewModel();
-
-            myPageViewModel.Login = userRequest.Login;
-            myPageViewModel.FirstName = userRequest.FirstName;
-            myPageViewModel.LastName = userRequest.LastName;
-            myPageViewModel.MiddleName = userRequest.MiddleName;
-            myPageViewModel.Email = userRequest.Email;
-            myPageViewModel.BirthdayDate = userRequest.BirthDate;
+            MyPageViewModel myPageViewModel = new()
+            {
+                Login = userRequest.Login,
+                FirstName = userRequest.FirstName,
+                LastName = userRequest.LastName,
+                MiddleName = userRequest.MiddleName,
+                Email = userRequest.Email,
+                BirthdayDate = userRequest.BirthDate
+            };
             foreach (string role in userRequest.Roles)
             {
                 if (role != null)
@@ -46,33 +47,64 @@ namespace MyBlogFVV.WEB.Services
 
             return myPageViewModel;
         }
-        public UserEditViewModel GetUserEditViewModelFromUserRequest(UserRequest userRequest)
+        public static AuthorPageViewModel GetAuthorPageViewModelFromUserRequest(UserRequest userRequest)
         {
-            UserEditViewModel userEditViewModel = new UserEditViewModel();
-            userEditViewModel.FirstName = userRequest.FirstName;
-            userEditViewModel.LastName = userRequest.LastName;
-            userEditViewModel.MiddleName = userRequest.MiddleName;
-            userEditViewModel.Email = userRequest.Email;
-            userEditViewModel.BirthDate = userRequest.BirthDate;
+            AuthorPageViewModel authorPageViewModel = new()
+            {
+                Id = userRequest.Id,
+                Login = userRequest.Login,
+                FirstName = userRequest.FirstName,
+                LastName = userRequest.LastName,
+                MiddleName = userRequest.MiddleName,
+                Email = userRequest.Email,
+                BirthdayDate = userRequest.BirthDate
+            };
+            foreach (string role in userRequest.Roles)
+            {
+                if (role != null)
+                {
+                    authorPageViewModel.Roles.Add(role);
+                }
+            }
+
+            return authorPageViewModel;
+        }
+        public static UserEditViewModel GetUserEditViewModelFromUserRequest(UserRequest userRequest)
+        {
+            UserEditViewModel userEditViewModel = new()
+            {
+                FirstName = userRequest.FirstName,
+                LastName = userRequest.LastName,
+                MiddleName = userRequest.MiddleName,
+                Email = userRequest.Email,
+                BirthDate = userRequest.BirthDate,
+                Login = userRequest.Login
+            };
+
+            foreach (var item in userRequest.Roles)
+            {
+                userEditViewModel.Roles.Add(item);
+            }
 
             return userEditViewModel;
         }
 
 
-        public SearchUsersViewModel GetSearchUsersViewModelFromListUserRequest(List<UserRequest> userRequest)
+        public static SearchUsersViewModel GetSearchUsersViewModelFromListUserRequest(List<UserRequest> userRequest)
         {
-            SearchUsersViewModel searchUsersViewModel = new SearchUsersViewModel();            
+            SearchUsersViewModel searchUsersViewModel = new();            
 
             foreach(var item in userRequest)
             {
-                UserViewModel userViewModel = new UserViewModel();
-
-                userViewModel.Id = item.Id;
-                userViewModel.FirstName = item.FirstName;
-                userViewModel.LastName = item.LastName;
-                userViewModel.MiddleName = item.MiddleName;
-                userViewModel.BirthDate = item.BirthDate;
-                userViewModel.Email = item.Email;
+                UserViewModel userViewModel = new()
+                {
+                    Id = item.Id,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    MiddleName = item.MiddleName,
+                    BirthDate = item.BirthDate,
+                    Email = item.Email
+                };
 
                 searchUsersViewModel.UserList.Add(userViewModel);
             }         
@@ -80,15 +112,17 @@ namespace MyBlogFVV.WEB.Services
             return searchUsersViewModel;
         }
 
-        public UserEditRequest GetUserEditRequestFromUserEditViewModel(UserEditViewModel userEditViewModel)
+        public static UserEditRequest GetUserEditRequestFromUserEditViewModel(UserEditViewModel userEditViewModel)
         {
-            UserEditRequest userEditRequest = new UserEditRequest();
-
-            userEditRequest.FirstName = userEditViewModel.FirstName;
-            userEditRequest.LastName = userEditViewModel.LastName;
-            userEditRequest.MiddleName = userEditViewModel.MiddleName;
-            userEditRequest.Email = userEditViewModel.Email;
-            userEditRequest.BirthDate = (DateTime)userEditViewModel.BirthDate;
+            UserEditRequest userEditRequest = new()
+            {
+                FirstName = userEditViewModel.FirstName,
+                LastName = userEditViewModel.LastName ?? string.Empty,
+                MiddleName = userEditViewModel.MiddleName ?? string.Empty,
+                Email = userEditViewModel.Email,
+                BirthDate = /*(DateTime)*/userEditViewModel.BirthDate,
+                Login = userEditViewModel.Login
+            };
 
             return userEditRequest;
         }

@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyBlogFVV.BLL.Infrastructure;
 using MyBlogFVV.BLL.Interfaces;
 using MyBlogFVV.BLL.Models.User;
-using MyBlogFVV.WEB.Models.Comment;
-using MyBlogFVV.WEB.Models.Post;
-using MyBlogFVV.WEB.Models.Tag;
 using MyBlogFVV.WEB.Models.User;
 using MyBlogFVV.WEB.Services;
 using System.Security.Claims;
@@ -19,16 +16,11 @@ namespace MyBlogFVV.WEB.Controllers
     //[Authorize(Policy = "OnlyForRoleAdmin")]
     //[Authorize(Policy = "OnlyForRoleUser")]
     //[Authorize(Policy = "OnlyForRoleModerator")]
-    public class UserController : Controller
+    public class UserController(IUserService userService, IHttpContextAccessor httpContextAccessor) : Controller
     {
-        MyMapping myMapping = new MyMapping();
-        IUserService _userService;
-        IHttpContextAccessor _httpContextAccessor;
-        public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor)
-        {
-            _userService = userService;
-            _httpContextAccessor = httpContextAccessor;
-        }
+        readonly IUserService _userService = userService;
+        readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
         public IActionResult Index()
         {
             return View();
@@ -50,7 +42,7 @@ namespace MyBlogFVV.WEB.Controllers
             ViewBag.RegistrationSuccessful = false;
             if (ModelState.IsValid)
             {
-                RegisterRequest registerRequest = myMapping.GetRegisterRequestFromRegisterViewModel(model);
+                RegisterRequest registerRequest = MyMapping.GetRegisterRequestFromRegisterViewModel(model);
 
                 OperationDetails result = await _userService.Create(registerRequest);
                 if (result.Succedeed == true)
@@ -110,7 +102,7 @@ namespace MyBlogFVV.WEB.Controllers
                 }
 
                 // создаем объект ClaimsIdentity
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                ClaimsIdentity claimsIdentity = new(claims, "Cookies");
                 // установка аутентификационных куки
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 return RedirectToAction("Index", "Home");
@@ -133,22 +125,16 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> MyPage()
         {
-            MyPageViewModel myPageViewModel = new MyPageViewModel();
-            List<PostViewModel> posts = new List<PostViewModel>();
-            List<CommentViewModel> comments = new List<CommentViewModel>();
-            List<TagViewModel> tags = new List<TagViewModel>();
-            //List<string> roles = new List<string>();
-            var s = User;
+            MyPageViewModel myPageViewModel;
             //Мой логин
-            string? username = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var rolesClims = _httpContextAccessor.HttpContext.User.Claims.ToList();
-            UserRequest? userRequest = null;
+            string? username = User.Identity?.Name;
+            UserRequest? userRequest;
             if (username != null)
             {
                 userRequest = await _userService.GetUserByLogin(username);
                 if (userRequest != null)
                 {
-                    myPageViewModel = myMapping.GetMyPageViewModelFromUserRequest(userRequest);
+                    myPageViewModel = MyMapping.GetMyPageViewModelFromUserRequest(userRequest);
                     return View(myPageViewModel);
                 }
                 return RedirectToAction("Index", "Home");
@@ -164,17 +150,16 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit()
         {
-            UserEditViewModel userEditViewModel = new UserEditViewModel();
+            UserEditViewModel userEditViewModel;
             //Мой логин
-            string? username = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var rolesClims = _httpContextAccessor.HttpContext.User.Claims.ToList();
-            UserRequest? userRequest = null;
+            string? username = User.Identity?.Name;
+            UserRequest? userRequest;
             if (username != null)
             {
                 userRequest = await _userService.GetUserByLogin(username);
                 if (userRequest != null)
                 {
-                    userEditViewModel = myMapping.GetUserEditViewModelFromUserRequest(userRequest);
+                    userEditViewModel = MyMapping.GetUserEditViewModelFromUserRequest(userRequest);
                     return View(userEditViewModel);
                 }
                 return RedirectToAction("MyPage", "User");
@@ -191,15 +176,23 @@ namespace MyBlogFVV.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserEditRequest? userEditRequest = null;
+                UserEditRequest? userEditRequest;
                 if (model != null)
                 {
-                    userEditRequest = myMapping.GetUserEditRequestFromUserEditViewModel(model);
+                    userEditRequest = MyMapping.GetUserEditRequestFromUserEditViewModel(model);
                     OperationDetails result = await _userService.Update(userEditRequest);
                     if (result.Succedeed == true)
                     {
                         ViewBag.EditSuccessful = true;
-                        return RedirectToAction("MyPage", "User");
+                        if(result.Property != "Logout")
+                        {
+                            return RedirectToAction("MyPage", "User");
+                        }
+                        else
+                        {
+                            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                            return RedirectToAction("Index", "Home");
+                        }                            
                     }
                     else
                     {
@@ -245,11 +238,11 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> AuthorList()
         {
-            SearchUsersViewModel searchUsersViewModel = new SearchUsersViewModel();
+            SearchUsersViewModel searchUsersViewModel = new();
             List<UserRequest>? UserList = await _userService.GetAll();
             if (UserList != null)
             {                
-                searchUsersViewModel = myMapping.GetSearchUsersViewModelFromListUserRequest(UserList);
+                searchUsersViewModel = MyMapping.GetSearchUsersViewModelFromListUserRequest(UserList);
             }
             return View("AuthorList", searchUsersViewModel);
         }
@@ -257,16 +250,16 @@ namespace MyBlogFVV.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> AuthorList(int Id)
         {
-            SearchUsersViewModel searchUsersViewModel = new SearchUsersViewModel();
+            SearchUsersViewModel searchUsersViewModel;
             if (Id>0)
             {
-                UserRequest? userRequest = new UserRequest();
+                UserRequest? userRequest;
                 userRequest = await _userService.GetUserById(Id);
-                List<UserRequest> userList = new List<UserRequest>();
+                List<UserRequest> userList = [];
                 if (userRequest != null)
                 {
                     userList.Add(userRequest);
-                    searchUsersViewModel = myMapping.GetSearchUsersViewModelFromListUserRequest(userList);
+                    searchUsersViewModel = MyMapping.GetSearchUsersViewModelFromListUserRequest(userList);
                     return View("AuthorList", searchUsersViewModel);
                 }
                 else
@@ -280,5 +273,23 @@ namespace MyBlogFVV.WEB.Controllers
             }
         }
         //------------------------------------------------
+        //--------Моя страничка---------------------------
+        [Route("AuthorPage")]
+        [HttpGet]
+        public async Task<IActionResult> AuthorPage(int id)
+        {
+            UserRequest? userRequest;
+            AuthorPageViewModel authorPageViewModel;
+            if (id>0)
+            {                
+                userRequest = await _userService.GetUserById(id);
+                if (userRequest != null)
+                {
+                    authorPageViewModel = MyMapping.GetAuthorPageViewModelFromUserRequest(userRequest);
+                    return View("AuthorPage", authorPageViewModel);
+                }
+            }
+            return RedirectToAction("AuthorList");
+        }
     }
 }

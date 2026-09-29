@@ -6,14 +6,10 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.DAL.Repositories
 {
-    public class TagRepository : ITagRepository
+    public class TagRepository(ApplicationDbContext context) : ITagRepository
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db = context;
 
-        public TagRepository(ApplicationDbContext context)
-        {
-            this.db = context;
-        }
         public async Task Create(Tag item)
         {
             await db.Tags.AddAsync(item);
@@ -26,7 +22,7 @@ namespace MyBlogFVV.DAL.Repositories
 
         public async Task<List<Tag>> GetAll()
         {
-            List<Tag>? x = await db.Tags.ToListAsync();
+            List<Tag> x = await db.Tags.ToListAsync();
             return x;
         }
 

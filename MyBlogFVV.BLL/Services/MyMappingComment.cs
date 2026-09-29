@@ -8,65 +8,70 @@ namespace MyBlogFVV.BLL.Services
 {
     internal class MyMappingComment
     {
-        public Comment GetCommentFromCommentRequest(CommentRequest commentRequest)
+        public static Comment GetCommentFromCommentRequest(CommentRequest commentRequest)
         {
-            Comment comment = new Comment();
-            comment.Text = commentRequest.Text;
-            comment.Date = commentRequest.CommentDate.ToString();
+            Comment comment = new()
+            {
+                Text = commentRequest.Text,
+                Date = commentRequest.CommentDate.ToString()
+            };
 
             return comment;
         }
-        public CommentRequest GetCommentRequestFromComment(Comment comment)
+        public static CommentRequest GetCommentRequestFromComment(Comment comment)
         {
-            CommentRequest commentRequest = new CommentRequest();
-
-            commentRequest.Id = comment.CommentId;
-            commentRequest.Text = comment.Text;
-            DateTime result;
-            if (DateTime.TryParse(comment.Date, out result))
+            CommentRequest commentRequest = new()
+            {
+                Id = comment.CommentId,
+                Text = comment.Text ?? string.Empty
+            };
+            if (DateTime.TryParse(comment.Date, out DateTime result))
             {
                 commentRequest.CommentDate = result;
             }
 
             return commentRequest;
         }
-        public List<CommentRequest> GetListCommentRequestFromListComment(List<Comment> comment)
+        public static List<CommentRequest> GetListCommentRequestFromListComment(List<Comment> comment)
         {
-            List<CommentRequest> listCommentRequest = new List<CommentRequest>();
+            List<CommentRequest> listCommentRequest = [];
 
             foreach (var item in comment)
             {
-                CommentRequest commentRequest = new CommentRequest();
-                commentRequest.Id = item.CommentId;
-                commentRequest.Text = item.Text;                
-                DateTime result;
-                if (DateTime.TryParse(item.Date, out result))
+                CommentRequest commentRequest = new()
+                {
+                    Id = item.CommentId,
+                    Text = item.Text ?? string.Empty
+                };
+                if (DateTime.TryParse(item.Date, out DateTime result))
                 {
                     commentRequest.CommentDate = result;
                 }
 
-                UserRequest userRequest = new UserRequest();
-                userRequest.Id = item.User.UserId;
-                userRequest.Login = item.User.Login;
-                userRequest.FirstName = item.User.FirstName;
-                userRequest.LastName = item.User.LastName;
-                userRequest.MiddleName = item.User.MiddleName;
-                DateTime resultUser;
-                if (DateTime.TryParse(item.User.BirthDate, out resultUser))
+                UserRequest userRequest = new()
+                {
+                    Id = item.User.UserId,
+                    Login = item.User.Login,
+                    FirstName = item.User.FirstName,
+                    LastName = item.User.LastName ?? string.Empty,
+                    MiddleName = item.User.MiddleName ?? string.Empty
+                };
+                if (DateTime.TryParse(item.User.BirthDate, out DateTime resultUser))
                 {
                     userRequest.BirthDate = resultUser;
                 }
                 userRequest.Email = item.User.Email;
                 commentRequest.Author = userRequest;
 
-                PostRequest postRequest = new PostRequest();
-                postRequest.Id = item.Post.PostId;
-                postRequest.Text = item.Post.Text;
-                postRequest.Title = item.Post.Title;
-                DateTime resultPost;
-                if (DateTime.TryParse(item.Date, out resultPost))
+                PostRequest postRequest = new()
                 {
-                    postRequest.PostDate = resultUser;
+                    Id = item.Post.PostId,
+                    Text = item.Post.Text,
+                    Title = item.Post.Title
+                };
+                if (DateTime.TryParse(item.Date, out DateTime resultPost))
+                {
+                    postRequest.PostDate = resultPost;
                 }
                 commentRequest.Post = postRequest;
 

@@ -1,0 +1,12 @@
+﻿@model MyBlogFVV.WEB.Models.Tag.TagViewModel
+
+@{
+    ViewData["Title"] = "ShowTag";
+}
+<div class="ContentCenter">
+    <label>Id: @Model.Id.ToString()</label>
+    <br />
+    <label>Тег: @Model.Text</label>
+    <br />
+    <a href="/Tag/TagList">Перейти к списку тегов</a>
+</div>

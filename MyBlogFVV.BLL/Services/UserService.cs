@@ -7,15 +7,10 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.BLL.Services
 {
-    public class UserService : IUserService
+    public class UserService(IUnitOfWork uow) : IUserService
     {
-        IUnitOfWork Database { get; set; }
-        MyMapping myMapping = new MyMapping();
+        IUnitOfWork Database { get; set; } = uow;
 
-        public UserService(IUnitOfWork uow)
-        {
-            Database = uow;
-        }
         //Создаем пользователя
         public async Task<OperationDetails> Create(RegisterRequest registerRequest)
         {
@@ -38,7 +33,7 @@ namespace MyBlogFVV.BLL.Services
                     return new OperationDetails(false, "Пользователь с таким Email уже существует", "Email");
                 }
                 //Если в БД нет пользователей с таким логином и Email то заносим его в БД
-                User user = myMapping.GetUserFromRegisterRequest(registerRequest);
+                User user = MyMapping.GetUserFromRegisterRequest(registerRequest);
                 await Database.Users.Create(user);
                 await Database.Save();
                 return new OperationDetails(true, "Регистрация успешно пройдена", "");              
@@ -48,22 +43,21 @@ namespace MyBlogFVV.BLL.Services
         //Ищем пользователя по логину и паролю
         public async Task<UserRequest?> Authenticate(string login, string password)
         {
-            User? user = null;
-            user = await Database.Users.GetUserByLoginAndPassword(login, password);
+            User? user = await Database.Users.GetUserByLoginAndPassword(login, password);
             UserRequest? userRequest = null;
             if(user!=null)
             {
-                userRequest = myMapping.GetUserRequestFromUser(user);
+                userRequest = MyMapping.GetUserRequestFromUser(user);
             }
             return userRequest;
         }
         public async Task<List<UserRequest>> GetAll()
         {
-            List<UserRequest>? userRequest = new List<UserRequest>();
+            List<UserRequest>? userRequest = [];
             List<User> users = await Database.Users.GetAll();
             if (users != null)
             {
-                userRequest = myMapping.GetListUserRequestFromListUser(users);
+                userRequest = MyMapping.GetListUserRequestFromListUser(users);
             }
             return userRequest;
         }
@@ -74,7 +68,7 @@ namespace MyBlogFVV.BLL.Services
             User? userСheckLogin = await Database.Users.GetUserByLogin(login);
             if (userСheckLogin != null)
             {
-                userRequest = myMapping.GetUserRequestFromUser(userСheckLogin);
+                userRequest = MyMapping.GetUserRequestFromUser(userСheckLogin);
             }
             return userRequest;
         }
@@ -85,7 +79,7 @@ namespace MyBlogFVV.BLL.Services
             User? userСheck = await Database.Users.GetUserByEmail(email);
             if (userСheck != null)
             {
-                userRequest = myMapping.GetUserRequestFromUser(userСheck);
+                userRequest = MyMapping.GetUserRequestFromUser(userСheck);
             }
             return userRequest;
         }
@@ -96,7 +90,7 @@ namespace MyBlogFVV.BLL.Services
             User? userСheck = await Database.Users.GetUserById(id);
             if (userСheck != null)
             {
-                userRequest = myMapping.GetUserRequestFromUser(userСheck);
+                userRequest = MyMapping.GetUserRequestFromUser(userСheck);
             }
             return userRequest;
         }
@@ -104,6 +98,10 @@ namespace MyBlogFVV.BLL.Services
         {
             //Проверим, есть ли данный email в базе
             User? userСheckEmail = await Database.Users.GetUserByEmail(userEditRequest.Email);
+            User? userСheckLogin = await Database.Users.GetUserByLogin(userEditRequest.Login);
+
+            bool logout = false; //При  изменении логина надо будет перезайти
+
             if (userСheckEmail == null)
             {
                 return new OperationDetails(false, "Пользователя с таким Email не существует", "Email");
@@ -114,10 +112,29 @@ namespace MyBlogFVV.BLL.Services
             if (userEditRequest.MiddleName != userСheckEmail.MiddleName) userСheckEmail.MiddleName = userEditRequest.MiddleName;
             if (userEditRequest.BirthDate.ToShortDateString() != userСheckEmail.BirthDate) userСheckEmail.BirthDate = userEditRequest.BirthDate.ToShortDateString();
             if (userEditRequest.Email != userСheckEmail.Email) userСheckEmail.Email = userEditRequest.Email;
+            if (userEditRequest.Login != userСheckEmail.Login)
+            {
+                //Проверим, есть ли такой логин в базе
+                if(userСheckLogin == null)
+                {
+                    userСheckEmail.Login = userEditRequest.Login;
+                    logout = true;
+                }
+                else
+                {
+                    return new OperationDetails(false, "Такой логин уже есть в базе", "Login");
+                }
+            }
             Database.Users.Update(userСheckEmail);
             await Database.Save();
-            return new OperationDetails(true, "Редактирование пользователя завершено успешно", "");
-
+            if(logout == false)
+            {
+                return new OperationDetails(true, "Редактирование пользователя завершено успешно", "");
+            }
+            else
+            {
+                return new OperationDetails(true, "Редактирование пользователя завершено успешно", "Logout");
+            } 
         }
         public async Task<OperationDetails> Delete(int id) //Удаление автора по его Id
         {
@@ -137,6 +154,7 @@ namespace MyBlogFVV.BLL.Services
         public void Dispose()
         {
             Database.Dispose();
+            GC.SuppressFinalize(this); // Блокируем вызов финализатора
         }
     }
 }

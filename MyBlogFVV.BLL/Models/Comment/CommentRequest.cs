@@ -7,8 +7,8 @@ namespace MyBlogFVV.BLL.Models.Comment
     {
         public int Id { get; set; }
         public DateTime CommentDate { get; set; }
-        public UserRequest Author { get; set; }
-        public PostRequest Post { get; set; }
+        public UserRequest Author { get; set; } = new UserRequest();
+        public PostRequest Post { get; set; } = new PostRequest();
         public string Text { get; set; } = string.Empty;
     }
 }

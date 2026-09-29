@@ -7,14 +7,9 @@ using MyBlogFVV.DAL.Interfaces;
 
 namespace MyBlogFVV.BLL.Services
 {
-    public class CommentService : ICommentService
+    public class CommentService(IUnitOfWork uow) : ICommentService
     {
-        IUnitOfWork Database { get; set; }
-        MyMappingComment myMappingComment = new MyMappingComment();
-        public CommentService(IUnitOfWork uow)
-        {
-            Database = uow;
-        }
+        IUnitOfWork Database { get; set; } = uow;
 
         public async Task<OperationDetails> Create(CommentRequest commentRequest)
         {
@@ -32,7 +27,7 @@ namespace MyBlogFVV.BLL.Services
                     Post? post = await Database.Posts.Get(commentRequest.Post.Id);
                     if (post is not null)
                     {
-                        Comment comment = myMappingComment.GetCommentFromCommentRequest(commentRequest);
+                        Comment comment = MyMappingComment.GetCommentFromCommentRequest(commentRequest);
                         comment.User = user;
                         comment.Post = post;
                         await Database.Comments.Create(comment);
@@ -53,11 +48,21 @@ namespace MyBlogFVV.BLL.Services
 
         public async Task<List<CommentRequest>> GetAll()
         {
-            List<CommentRequest> commentRequest = new List<CommentRequest>();
+            List<CommentRequest> commentRequest = [];
             List<Comment> comments = await Database.Comments.GetAll();
             if (comments != null)
             {
-                commentRequest = myMappingComment.GetListCommentRequestFromListComment(comments);
+                commentRequest = MyMappingComment.GetListCommentRequestFromListComment(comments);
+            }
+            return commentRequest;
+        }
+        public async Task<List<CommentRequest>> GetAllUser(int idUser)
+        {
+            List<CommentRequest> commentRequest = [];
+            List<Comment> comments = await Database.Comments.GetAllUser(idUser);
+            if (comments != null)
+            {
+                commentRequest = MyMappingComment.GetListCommentRequestFromListComment(comments);
             }
             return commentRequest;
         }
@@ -69,7 +74,7 @@ namespace MyBlogFVV.BLL.Services
             Comment? commentСheck = await Database.Comments.GetCommentById(id);
             if (commentСheck != null)
             {
-                commentRequest = myMappingComment.GetCommentRequestFromComment(commentСheck);
+                commentRequest = MyMappingComment.GetCommentRequestFromComment(commentСheck);
             }
             return commentRequest;
         }
@@ -109,7 +114,8 @@ namespace MyBlogFVV.BLL.Services
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Database.Dispose();
+            GC.SuppressFinalize(this); // Блокируем вызов финализатора
         }
     }
 }
