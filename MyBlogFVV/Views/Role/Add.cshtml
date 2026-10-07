@@ -7,14 +7,20 @@
 <div class="ContentCenter">
     <h2>Создание новой роли</h2>
     <form method="post" asp-controller="Role" asp-action="Add">
-        <div asp-validation-summary="ModelOnly"></div>
+        <div class="MessageError" asp-validation-summary="ModelOnly"></div>
         <div>
             <label asp-for="Title"></label><br />
             <input asp-for="Title" />
+            <div>
+                <span class="MessageError" asp-validation-for="Title"></span>
+            </div>
         </div>
         <div>
             <label asp-for="Description"></label><br />
             <input asp-for="Description" />
+            <div>
+                <span class="MessageError" asp-validation-for="Description"></span>
+            </div>
         </div>
         <div>
             <input class="btn" type="submit" value="Создать роль" />

@@ -6,7 +6,9 @@ using MyBlogFVV.BLL.Services;
 using MyBlogFVV.DAL.EF;
 using MyBlogFVV.DAL.Interfaces;
 using MyBlogFVV.DAL.Repositories;
+using NLog.Web;
 using System.Security.Claims;
+
 namespace MyBlogFVV.WEB
 {
     public class Program
@@ -14,6 +16,13 @@ namespace MyBlogFVV.WEB
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            //--------Подключаю NLog--------------------
+            // Remove default Microsoft logging providers
+            builder.Logging.ClearProviders();
+            // Register NLog
+            builder.Host.UseNLog();
+            //------------------------------------------
 
             //Настройки подключения к БД
             var connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -57,10 +66,33 @@ namespace MyBlogFVV.WEB
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<IRoleService, RoleService>();
 
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+            /*
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                //app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            */
             //Задал культуру
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
@@ -69,15 +101,7 @@ namespace MyBlogFVV.WEB
             //перенаправим если страницу не нашли
             app.UseStatusCodePagesWithRedirects("NotFoundContent");
 
-            app.UseAuthentication();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseAuthentication();            
 
             app.UseHttpsRedirection();
             app.UseRouting();

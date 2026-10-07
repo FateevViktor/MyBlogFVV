@@ -10,16 +10,21 @@ namespace MyBlogFVV.WEB.Models.User
 
         [Required(ErrorMessage = "Вам необходимо ввести имя")]
         [Display(Name = "Имя")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string FirstName { get; set; } = string.Empty;
 
         [Display(Name = "Фамилия")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string? LastName { get; set; }
 
         [Display(Name = "Отчество")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string? MiddleName { get; set; }
 
         [Required(ErrorMessage = "Вам необходимо ввести Email")]
         [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "Некорректный адрес")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string Email { get; set; } = string.Empty;
 
         [Display(Name = "Дата рождения")]
@@ -28,6 +33,7 @@ namespace MyBlogFVV.WEB.Models.User
 
         [Required(ErrorMessage = "Вам необходимо ввести логин")]
         [Display(Name = "Login")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string Login { get; set; } = string.Empty;
 
         public List<string> Roles { get; set; } = [];

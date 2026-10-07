@@ -9,7 +9,7 @@
     {
         <h2>Регистрация нового пользователя</h2>
         <form method="post" asp-controller="User" asp-action="Register">
-            <div asp-validation-summary="ModelOnly"></div>
+            <div class="MessageError" asp-validation-summary="ModelOnly"></div>
             <div>
                 <label asp-for="FirstName"></label><br />
                 <input asp-for="FirstName" />

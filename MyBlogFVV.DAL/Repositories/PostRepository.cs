@@ -11,12 +11,12 @@ namespace MyBlogFVV.DAL.Repositories
 
         public async Task<List<Post>> GetAll()
         {
-            List<Post> x = await db.Posts.Include(a => a.User).ToListAsync();
+            List<Post> x = await db.Posts.Include(a => a.User).AsSplitQuery().ToListAsync();
             return x;
         }
         public async Task<List<Post>> GetAll(int id)
         {
-            List<Post> x = await db.Posts.Include(a => a.User).Where(a => a.User != null && a.User.UserId == id).ToListAsync();
+            List<Post> x = await db.Posts.Include(a => a.User).AsSplitQuery().Where(a => a.User != null && a.User.UserId == id).ToListAsync();
             return x;
         }
 
@@ -25,6 +25,7 @@ namespace MyBlogFVV.DAL.Repositories
             Post? x = await db.Posts.Include(u => u.User)
                                     .Include(u => u.Comments).ThenInclude(u => u.User)
                                     .Include(u => u.PostTags).ThenInclude(u => u.Tag)
+                                    .AsSplitQuery()
                                     .FirstOrDefaultAsync(u => u.PostId == id);
             return x;
         }

@@ -7,21 +7,27 @@
     <div>
         <h2>Редактирование роли</h2>
         <form method="post" asp-controller="Role" asp-action="UpdateEdit">
-            <div asp-validation-summary="ModelOnly"></div>
+            <div class="MessageError" asp-validation-summary="ModelOnly"></div>
             <div>
                 <label asp-for="Id"></label><br />
                 <input asp-for="Id" class="ipt" readonly />
-                <span asp-validation-for="Id"></span>
+                <div>
+                    <span class="MessageError" asp-validation-for="Id"></span>
+                </div>
             </div>
             <div>
                 <label asp-for="Title"></label><br />
                 <input asp-for="Title" class="ipt" />
-                <span asp-validation-for="Title"></span>
+                <div>
+                    <span class="MessageError" asp-validation-for="Title"></span>
+                </div>
             </div>
             <div>
                 <label asp-for="Description"></label><br />
                 <textarea class="TextPost" asp-for="Description" >@Model.Description</textarea>
-                <span asp-validation-for="Description"></span>
+                <div>
+                    <span class="MessageError" asp-validation-for="Description"></span>
+                </div>
             </div>
             <div>
                 <input type="submit" value="Сохранить" class="btn" />

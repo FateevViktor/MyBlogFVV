@@ -13,13 +13,5 @@ namespace MyBlogFVV.WEB.Models.User
         [Required(ErrorMessage = "Вам необходимо ввести логин")]
         [Display(Name = "Логин")]
         public string Login { get; set; } = string.Empty;
-
-        //[Required]
-        [Display(Name = "Запомнить меня")]
-        public bool RememberMe { get; set; } = false;
-
-        //[Required]
-        //[Display(Name = "Никнейм")]
-        public string ReturnUrl { get; set; } = string.Empty;
     }
 }

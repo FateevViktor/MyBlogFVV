@@ -4,13 +4,14 @@
     <div>
         <div>
             <form asp-area="" asp-controller="Comment" asp-action="CommentList" method="post">
+                <div class="MessageError" asp-validation-summary="ModelOnly"></div>
                 <input class="ipt" type="number" placeholder="Поиск по Id" name="Id" />
             </form>
         </div>
 
         <div>
 
-            @if (Model.CommentList.Count != 0)
+            @if (Model!=null && Model.CommentList.Count != 0)
             {
                 <table class="tbl">
                     <thead>

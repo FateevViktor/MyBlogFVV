@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MyBlogFVV.BLL.Interfaces;
 using MyBlogFVV.BLL.Models.Post;
-using MyBlogFVV.WEB.Models;
 using MyBlogFVV.WEB.Models.Post;
 using MyBlogFVV.WEB.Services;
-using System.Diagnostics;
 
 namespace MyBlogFVV.WEB.Controllers
 {
@@ -22,25 +21,44 @@ namespace MyBlogFVV.WEB.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Пользователь {UserLogin} зашел на страничку Home", User.Identity?.Name);
             SearchPostsViewModel searchPostsViewModel = new();
+            _logger.LogInformation("Пытаемся загрузить статьи из БД, пользователь {UserLogin}", User.Identity?.Name);
 
-            List<PostRequest> postList = await _postService.GetAll();
+            List<PostRequest> postList;
+            try
+            {
+                postList = await _postService.GetAll();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка в методе Index класс HomeController.");
+                return View("Error");
+            }
+
             List<PostRequest> postListSorted = [];
             postListSorted = [.. postList.OrderByDescending(p => p.PostDate)];
             if (postList != null)
             {
+                _logger.LogInformation("Статьи найдены");
                 searchPostsViewModel = MyMappingPost.GetSearchPostsViewModelFromListPostRequest(postListSorted);
             }
-            return View(searchPostsViewModel);
+            else
+            {
+                _logger.LogWarning("Не удалось найти статьи в БД");
+            }
+                return View(searchPostsViewModel);
         }
         [AllowAnonymous]
         public IActionResult About()
         {
+            _logger.LogInformation("Пользователь {UserLogin} зашел на страничку About", User.Identity?.Name);
             return View();
         }
         [AllowAnonymous]
         public IActionResult Contacts()
         {
+            _logger.LogInformation("Пользователь {UserLogin} зашел на страничку Contacts", User.Identity?.Name);
             return View();
         }
         [AllowAnonymous]
@@ -49,10 +67,17 @@ namespace MyBlogFVV.WEB.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [AllowAnonymous]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionFeature != null)
+            {
+                Exception ex = exceptionFeature.Error;
+                string path = exceptionFeature.Path; // Путь, где произошла ошибка
+                _logger.LogError(/*ex, */"Произошла непредвиденная ошибка. Путь {Path}. Сообщение {ErrorMessage}", path, ex.Message);
+            }
+            return View();
         }
         /// <summary>
         /// страничка выпадает, если пользователь делает запрещенное действие, не в рамках его роли

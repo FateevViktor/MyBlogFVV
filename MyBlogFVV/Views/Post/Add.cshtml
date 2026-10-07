@@ -10,7 +10,7 @@
         <h2>Создание новой статьи</h2>
 
         <form class="ContentCenter" method="post" asp-controller="Post" asp-action="Add">
-            <div asp-validation-summary="ModelOnly"></div>
+            <div class="MessageError" asp-validation-summary="ModelOnly"></div>
             <h2>Используемые теги</h2>
             <!-- выводим теги -->
             <div>
@@ -47,10 +47,16 @@
             <div>
                 <label asp-for="Title"></label><br />
                 <input asp-for="Title" />
+                <div>
+                    <span class="MessageError" asp-validation-for="Title"></span>
+                </div>
             </div>
             <div>
                 <label asp-for="Summary"></label><br />
                 <textarea class="TextPost" asp-for="Summary"></textarea>
+                <div>
+                    <span class="MessageError" asp-validation-for="Summary"></span>
+                </div>
             </div>
             <div>
                 <label asp-for="Text"></label><br />

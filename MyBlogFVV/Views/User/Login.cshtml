@@ -7,7 +7,7 @@
 <div class="ContentCenter">
     <h4>Добро пожаловать!</h4>
     <form method="post" asp-controller="User" asp-action="Login">
-        <div asp-validation-summary="ModelOnly"></div>
+        <div class="MessageError" asp-validation-summary="ModelOnly"></div>
         <div>
             <label asp-for="Login"></label><br />
             <input asp-for="Login"/>
@@ -19,7 +19,7 @@
             <label asp-for="Password"></label><br />
             <input asp-for="Password"/>
             <div>
-                <span class="MessageError" asp-validation-for="Password" class="text-danger"></span>
+                <span class="MessageError" asp-validation-for="Password"></span>
             </div>
         </div>
         <div>

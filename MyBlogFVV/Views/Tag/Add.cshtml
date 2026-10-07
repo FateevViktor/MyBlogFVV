@@ -7,10 +7,13 @@
 <div class="ContentCenter">
     <h2>Создание нового тега</h2>
     <form method="post" asp-controller="Tag" asp-action="Add">
-        <div asp-validation-summary="ModelOnly"></div>
+        <div class="MessageError" asp-validation-summary="ModelOnly"></div>
         <div>
             <label asp-for="Text"></label><br />
             <input asp-for="Text" />
+            <div>
+                <span class="MessageError" asp-validation-for="Text"></span>
+            </div>
         </div>
         <div>
             <input class="btn" type="submit" value="Создать тег" />

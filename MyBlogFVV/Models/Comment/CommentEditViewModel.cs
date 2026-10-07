@@ -9,16 +9,15 @@ namespace MyBlogFVV.WEB.Models.Comment
         [Display(Name = "Id")]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Необходимо ввести дату и время комментария")]
         [Display(Name = "Дата комментария")]
         [DataType(DataType.DateTime)] //Указываем, что нам нужна дата и время
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime CommentDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Необходимо заполнить комментарий")]
         [Display(Name = "Текст комментария")]
         [DataType(DataType.MultilineText)] //многострочный текст
+        [StringLength(200, MinimumLength = 1, ErrorMessage = "Длина комментария должна быть от 1 до 200 символов")]
         public string Text { get; set; } = string.Empty;
     }
 }

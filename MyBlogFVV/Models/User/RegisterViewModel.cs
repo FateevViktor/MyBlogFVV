@@ -6,18 +6,23 @@ namespace MyBlogFVV.WEB.Models.User
     {
         [Required(ErrorMessage = "Вам необходимо ввести имя")]
         [Display(Name = "Имя")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string FirstName { get; set; } = string.Empty;
 
         //[Required]
         [Display(Name = "Фамилия")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string? LastName { get; set; }
 
         //[Required]
         [Display(Name = "Отчество")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string? MiddleName { get; set; }
 
         [Required(ErrorMessage = "Вам необходимо ввести Email")]
+        [EmailAddress(ErrorMessage = "Некорректный адрес")]
         [Display(Name = "Email")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string Email { get; set; } = string.Empty;
 
         [Display(Name = "Дата рождения")]
@@ -28,7 +33,7 @@ namespace MyBlogFVV.WEB.Models.User
         [Required(ErrorMessage = "Вам необходимо ввести пароль")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
-        [StringLength(100, ErrorMessage = "Поле {0} должно иметь минимум {2} и максимум {1} символов.", MinimumLength = 5)]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Вам необходимо подтвердить пароль")]
@@ -39,6 +44,7 @@ namespace MyBlogFVV.WEB.Models.User
 
         [Required(ErrorMessage = "Вам необходимо ввести логин")]
         [Display(Name = "Логин")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Длина должна быть от 1 до 50 символов")]
         public string Login { get; set; } = string.Empty;
     }
 }
