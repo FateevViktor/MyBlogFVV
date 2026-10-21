@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyBlogFVV.BLL.Infrastructure;
 using MyBlogFVV.BLL.Interfaces;
 using MyBlogFVV.BLL.Models.Role;
-using MyBlogFVV.DAL.Entities;
 using MyBlogFVV.WEB.Models.Role;
 using MyBlogFVV.WEB.Services;
 
@@ -16,6 +15,7 @@ namespace MyBlogFVV.WEB.Controllers
         readonly IRoleService _roleService = roleService;
         private readonly ILogger<RoleController> _logger = logger;
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

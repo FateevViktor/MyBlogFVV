@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MyBlogFVV.BLL.Interfaces;
 using MyBlogFVV.BLL.Services;
 using MyBlogFVV.DAL.EF;
@@ -69,30 +70,54 @@ namespace MyBlogFVV.WEB
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //Добавляем сваггер
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "MyBlog API",
+                    Version = "v1",
+                    Description = "В данном API организованы основные функции на все контроллеры",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Фатеев Виктор Вячеславович",
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Лицензии нет",
+                    }
+                });
+                //настраиваем Swagger на чтение XML-комментариев
+                //var xmlPath = Path.Combine(Environment.CurrentDirectory, "documentation.xml");
+                var xmlFilename = "documentation.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+                options.IncludeXmlComments(Path.Combine("../MyBlogFVV.API", xmlFilename));
+            });
 
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+                /*
+                app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                    options.RoutePrefix = string.Empty;
+                });
+                */
                 //app.UseDeveloperExceptionPage();
+                
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                app.UseHsts();                
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            /*
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                //app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            */
             //Задал культуру
             app.UseRequestLocalization(new RequestLocalizationOptions
             {

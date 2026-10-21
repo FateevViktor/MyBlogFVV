@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyBlogFVV.API</name>
+    </assembly>
+    <members>
+        <member name="T:MyBlogFVV.API.Controllers.UserController">
+            <summary>
+            api по упревлению пользователем
+            </summary>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.UserController.#ctor(MyBlogFVV.BLL.Interfaces.IUserService,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.API.Controllers.UserController})">
+            <summary>
+            api по упревлению пользователем
+            </summary>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.UserController.Index">
+            <summary>
+            Приветствие пользователя
+            </summary>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.UserController.Register(MyBlogFVV.API.Models.User.RegisterModel)">
+            <summary>
+            Регистрация пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.WeatherForecastController.Get">
+            <summary>
+            Возвращает прогноз погоды на пять дней
+            </summary>
+            <returns>Список обхектов WeatherForecast</returns>
+        </member>
+    </members>
+</doc>

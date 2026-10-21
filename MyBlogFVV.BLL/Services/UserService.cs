@@ -144,11 +144,11 @@ namespace MyBlogFVV.BLL.Services
             {
                 Database.Users.Delete(userСheckId);
                 await Database.Save();
-                return new OperationDetails(true, "Регистрация успешно пройдена", "MessageOperationDetails");                
+                return new OperationDetails(true, "Удаление пользователя прошло успешно", "MessageOperationDetails");                
             }
             else
             {
-                return new OperationDetails(false, "Регистрация успешно пройдена", "");
+                return new OperationDetails(false, "Удалить не удалось - пользователя с таким id нет в БД", "");
             }
         }
         public void Dispose()

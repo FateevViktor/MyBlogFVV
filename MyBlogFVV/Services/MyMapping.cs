@@ -92,9 +92,9 @@ namespace MyBlogFVV.WEB.Services
 
         public static SearchUsersViewModel GetSearchUsersViewModelFromListUserRequest(List<UserRequest> userRequest)
         {
-            SearchUsersViewModel searchUsersViewModel = new();            
+            SearchUsersViewModel searchUsersViewModel = new();
 
-            foreach(var item in userRequest)
+            foreach (var item in userRequest)
             {
                 UserViewModel userViewModel = new()
                 {
@@ -107,8 +107,8 @@ namespace MyBlogFVV.WEB.Services
                 };
 
                 searchUsersViewModel.UserList.Add(userViewModel);
-            }         
-            
+            }
+
             return searchUsersViewModel;
         }
 

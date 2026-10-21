@@ -11,6 +11,10 @@ using System.Security.Claims;
 
 namespace MyBlogFVV.WEB.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с пользователем
+    /// </summary>
+    /// <returns></returns>
     [Route("User")]
     [Authorize]
     //[Authorize(Policy = "OnlyForRoleAdmin")]
@@ -22,11 +26,11 @@ namespace MyBlogFVV.WEB.Controllers
         readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogger<UserController> _logger = logger;
 
-        public IActionResult Index()
-        {
-            return View();
-        }
         //---------------Блок регистрации-----------------
+        /// <summary>
+        /// Регистрация пользователя
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("Register")]
         [HttpGet]
@@ -36,6 +40,11 @@ namespace MyBlogFVV.WEB.Controllers
             ViewBag.RegistrationSuccessful = false;
             return View();
         }
+
+        /// <summary>
+        /// Регистрация пользователя
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("Register")]
         [HttpPost]
@@ -79,6 +88,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //-------------Вход в учетную запись--------------
+        /// <summary>
+        /// Введение логина и пароля
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("Login")]
         [HttpGet]
@@ -87,6 +100,11 @@ namespace MyBlogFVV.WEB.Controllers
             _logger.LogInformation("Пользователь {UserLogin} пытается войти в свою учетную запись", User.Identity?.Name);
             return View();
         }
+
+        /// <summary>
+        /// Введение логина и пароля
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("Login")]
         [HttpPost]
@@ -144,6 +162,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //--------Выход из учетной записи-----------------
+        /// <summary>
+        /// Выход из своей учетной записи
+        /// </summary>
+        /// <returns></returns>
         [Route("Logout")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -155,6 +177,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //--------Моя страничка---------------------------
+        /// <summary>
+        /// Страничка пользователя
+        /// </summary>
+        /// <returns></returns>
         [Route("MyPage")]
         [HttpGet]
         public async Task<IActionResult> MyPage()
@@ -196,6 +222,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //--------Редактирование своей учетной записи-----
+        /// <summary>
+        /// Редактирование пользователя
+        /// </summary>
+        /// <returns></returns>
         [Route("Edit")]
         [HttpGet]
         public async Task<IActionResult> Edit()
@@ -235,7 +265,10 @@ namespace MyBlogFVV.WEB.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
+        /// <summary>
+        /// Редактирование пользователя
+        /// </summary>
+        /// <returns></returns>
         [Route("Edit")]
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditViewModel model)
@@ -292,6 +325,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //--------------Удаление пользователя-------------
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "OnlyForRoleAdmin")]
         [Route("Delete")]
         [HttpPost]
@@ -331,6 +368,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //---------Список авторов-------------------
+        /// <summary>
+        /// Список всех пользователей
+        /// </summary>
+        /// <returns></returns>
         [Route("AuthorList")]
         [HttpGet]
         public async Task<IActionResult> AuthorList()
@@ -359,6 +400,11 @@ namespace MyBlogFVV.WEB.Controllers
             }
             return View("AuthorList", searchUsersViewModel);
         }
+
+        /// <summary>
+        /// Выбираем пользователя по Id
+        /// </summary>
+        /// <returns></returns>
         [Route("AuthorList")]
         [HttpPost]
         public async Task<IActionResult> AuthorList(int Id)
@@ -402,6 +448,10 @@ namespace MyBlogFVV.WEB.Controllers
         }
         //------------------------------------------------
         //--------Моя страничка---------------------------
+        /// <summary>
+        /// Страничка автора статей
+        /// </summary>
+        /// <returns></returns>
         [Route("AuthorPage")]
         [HttpGet]
         public async Task<IActionResult> AuthorPage(int id)

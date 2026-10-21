@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MyBlogFVV.WEB.Controllers
 {
     public class AboutController(ILogger<AboutController> logger) : Controller
     {
         private readonly ILogger<AboutController> _logger = logger;
+
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult Index()
         {
             _logger.LogInformation("Пользователь {UserLogin} зашел на страничку About", User.Identity?.Name);

@@ -8,6 +8,7 @@ using MyBlogFVV.WEB.Services;
 
 namespace MyBlogFVV.WEB.Controllers
 {
+    //[Route("Home")]
     [Authorize(Policy = "OnlyForRoleAdmin")]
     public class HomeController(ILogger<HomeController> logger, IPostService postService) : Controller
     {
@@ -18,7 +19,9 @@ namespace MyBlogFVV.WEB.Controllers
         /// √лавна€ страница, выдаем последние посты.
         /// </summary>
         /// <returns></returns>
+        //[Route("")]
         [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("ѕользователь {UserLogin} зашел на страничку Home", User.Identity?.Name);
@@ -49,25 +52,47 @@ namespace MyBlogFVV.WEB.Controllers
             }
                 return View(searchPostsViewModel);
         }
+        /// <summary>
+        /// страничка посвещена описанию проекта
+        /// </summary>
+        /// <returns></returns>
+        [Route("About")]
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult About()
         {
             _logger.LogInformation("ѕользователь {UserLogin} зашел на страничку About", User.Identity?.Name);
             return View();
         }
+
+        /// <summary>
+        /// на данной страничке можно посмотреть контакты дл€ обратной св€зи
+        /// </summary>
+        /// <returns></returns>
+        [Route("Contacts")]
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult Contacts()
         {
             _logger.LogInformation("ѕользователь {UserLogin} зашел на страничку Contacts", User.Identity?.Name);
             return View();
         }
+
+        //[Route("Contacts")]
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        /// <summary>
+        /// страничка выпадает, если произошла ошибка
+        /// </summary>
+        /// <returns></returns>
+        [Route("Error")]
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult Error()
         {
             var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
@@ -85,6 +110,7 @@ namespace MyBlogFVV.WEB.Controllers
         /// <returns></returns>
         [Route("/AccessDanied")]
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult AccessDanied()
         {
             return View();
@@ -96,6 +122,7 @@ namespace MyBlogFVV.WEB.Controllers
         /// <returns></returns>
         [Route("NotFoundContent")]
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult NotFoundContent()
         {
             return View();

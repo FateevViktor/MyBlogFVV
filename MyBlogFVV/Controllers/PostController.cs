@@ -9,7 +9,6 @@ using MyBlogFVV.WEB.Models.Post;
 using MyBlogFVV.WEB.Models.Tag;
 using MyBlogFVV.WEB.Models.User;
 using MyBlogFVV.WEB.Services;
-using System.Diagnostics;
 
 namespace MyBlogFVV.WEB.Controllers
 {
@@ -24,6 +23,7 @@ namespace MyBlogFVV.WEB.Controllers
         readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogger<PostController> _logger = logger;
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

@@ -15,8 +15,8 @@
         <div class="HeaderMenu">
             <nav>
                 <a href="/">Главная страница</a>
-                <a href="/About">Страница About</a>
-                <a href="/Contacts">Контакты</a>
+                <a href="/About/Index">Страница About</a>
+                <a href="/Contacts/Index">Контакты</a>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
                     <a href="/User/MyPage">Мой профиль</a>

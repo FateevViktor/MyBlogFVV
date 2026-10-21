@@ -16,6 +16,7 @@ namespace MyBlogFVV.WEB.Controllers
         readonly ITagService _tagService = tagService;
         private readonly ILogger<TagController> _logger = logger;
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

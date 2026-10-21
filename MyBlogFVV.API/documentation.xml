@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyBlogFVV.API</name>
+    </assembly>
+    <members>
+        <member name="T:MyBlogFVV.API.Controllers.ApiCommentController">
+            <summary>
+            api по упревлению комментариями
+            </summary>
+            <returns></returns>
+            [ApiController]
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiCommentController.#ctor(MyBlogFVV.BLL.Interfaces.ICommentService,MyBlogFVV.BLL.Interfaces.IUserService,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.API.Controllers.ApiCommentController})">
+            <summary>
+            api по упревлению комментариями
+            </summary>
+            <returns></returns>
+            [ApiController]
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiCommentController.Add(MyBlogFVV.API.Models.Comment.CommentAddModel)">
+            <summary>
+            Добавление нового комментария
+            </summary>
+            <param name="model"></param>
+            <returns>Сообщение об успешности или нет</returns>
+            <response code="201">Комментарий успешно добавлен</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiCommentController.EditUpdate(MyBlogFVV.API.Models.Comment.CommentEditModel)">
+            <summary>
+            Редактирование комментария
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <response code="200">Комментарий успешно изменен</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiCommentController.Delete(System.Int32)">
+            <summary>
+            Удаление комментария
+            </summary>
+            <param name="commentId"></param>
+            <returns></returns>
+            <response code="200">Комментарий успешно удалили</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiCommentController.CommentList">
+            <summary>
+            Посмотреть все комментарии
+            </summary>
+            <returns></returns>
+            <response code="200">Успешно загрузили комментарии</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="T:MyBlogFVV.API.Controllers.ApiPostController">
+            <summary>
+            api по упревлению статьями
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiPostController.#ctor(MyBlogFVV.BLL.Interfaces.IPostService,MyBlogFVV.BLL.Interfaces.IUserService,Microsoft.AspNetCore.Http.IHttpContextAccessor,MyBlogFVV.BLL.Interfaces.ITagService,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.API.Controllers.ApiPostController})">
+            <summary>
+            api по упревлению статьями
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiPostController.Add(MyBlogFVV.API.Models.Post.PostAddApiModel)">
+            <summary>
+            Добавление новой статьи
+            </summary>
+            <param name="modelApi"></param>
+            <returns>Сообщение об успешности или нет</returns>
+            <response code="201">Статья успешно добавлена</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiPostController.EditUpdate(MyBlogFVV.API.Models.Post.PostEditModel)">
+            <summary>
+            Редактирование статьи
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <response code="200">Статья успешно изменена</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiPostController.Delete(System.Int32)">
+            <summary>
+            Удаление статьи
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Статью успешно удалили</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiPostController.PostList">
+            <summary>
+            Посмотреть все статьи
+            </summary>
+            <returns></returns>
+            <response code="200">Успешно загрузили статьи</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="T:MyBlogFVV.API.Controllers.ApiRoleController">
+            <summary>
+            api по упревлению ролями
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiRoleController.#ctor(MyBlogFVV.BLL.Interfaces.IRoleService,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.API.Controllers.ApiRoleController})">
+            <summary>
+            api по упревлению ролями
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiRoleController.Add(MyBlogFVV.API.Models.Role.RoleModel)">
+            <summary>
+            Добавление новой роли
+            </summary>
+            <param name="model"></param>
+            <returns>Сообщение об успешности или нет</returns>
+            <response code="201">Роль успешно добавлена</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiRoleController.Edit(MyBlogFVV.API.Models.Role.RoleModel)">
+            <summary>
+            Редактирование роли
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <response code="200">Роль успешно изменена</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiRoleController.Delete(System.Int32)">
+            <summary>
+            Удаление роли
+            </summary>
+            <param name="roleId"></param>
+            <returns></returns>
+            <response code="200">Роль успешно удалили</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiRoleController.RoleList">
+            <summary>
+            Посмотреть все роли
+            </summary>
+            <returns></returns>
+            <response code="200">Успешно загрузили роли</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="T:MyBlogFVV.API.Controllers.ApiTagController">
+            <summary>
+            api по упревлению тегами
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiTagController.#ctor(MyBlogFVV.BLL.Interfaces.ITagService,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.API.Controllers.ApiTagController})">
+            <summary>
+            api по упревлению тегами
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiTagController.Add(MyBlogFVV.API.Models.Tag.TagModel)">
+            <summary>
+            Добавление нового тега
+            </summary>
+            <param name="model"></param>
+            <returns>Сообщение об успешности или нет</returns>
+            <response code="201">Тег успешно добавлен</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiTagController.Edit(MyBlogFVV.API.Models.Tag.TagEditModel)">
+            <summary>
+            Редактирование тега
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <response code="200">Тег успешно изменен</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiTagController.Delete(System.Int32)">
+            <summary>
+            Удаление тега
+            </summary>
+            <param name="tagId"></param>
+            <returns></returns>
+            <response code="200">Тег успешно удалили</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiTagController.TagList">
+            <summary>
+            Посмотреть все теги
+            </summary>
+            <returns></returns>
+            <response code="200">Успешно загрузили теги</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="T:MyBlogFVV.API.Controllers.ApiUserController">
+            <summary>
+            api по упревлению пользователем
+            </summary>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiUserController.#ctor(MyBlogFVV.BLL.Interfaces.IUserService,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.API.Controllers.ApiUserController})">
+            <summary>
+            api по упревлению пользователем
+            </summary>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiUserController.Register(MyBlogFVV.API.Models.User.RegisterModel)">
+            <summary>
+            Регистрация пользователя
+            </summary>
+            <param name="model"></param>
+            <returns>Сообщение об успешности или нет</returns>
+            <response code="201">Пользователь успешно зарегистрирован</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiUserController.AuthorList">
+            <summary>
+            Список всех пользователей
+            </summary>
+            <returns></returns>
+            <response code="200">Пользователи успешно загрузились</response>
+            <response code="400">Возникла ошибка при обращении к БД</response>        
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiUserController.Edit(MyBlogFVV.API.Models.User.UserEditModel)">
+            <summary>
+            Редактирование пользователя
+            </summary>
+            <returns></returns>
+            <response code="200">Пользователя успешно отредактировали</response>
+            <response code="400">Возникла ошибка</response>  
+        </member>
+        <member name="M:MyBlogFVV.API.Controllers.ApiUserController.Delete(System.Int32)">
+            <summary>
+            Удаление пользователя
+            </summary>
+            <returns></returns>
+            <response code="200">Пользователя успешно удалили</response>
+            <response code="400">Возникла ошибка</response>
+        </member>
+    </members>
+</doc>

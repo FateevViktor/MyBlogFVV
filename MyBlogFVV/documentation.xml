@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyBlogFVV.WEB</name>
+    </assembly>
+    <members>
+        <member name="M:MyBlogFVV.WEB.Controllers.HomeController.Index">
+            <summary>
+            Главная страница, выдаем последние посты.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.HomeController.About">
+            <summary>
+            страничка посвещена описанию проекта
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.HomeController.Contacts">
+            <summary>
+            на данной страничке можно посмотреть контакты для обратной связи
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.HomeController.Error">
+            <summary>
+            страничка выпадает, если произошла ошибка
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.HomeController.AccessDanied">
+            <summary>
+            страничка выпадает, если пользователь делает запрещенное действие, не в рамках его роли
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.HomeController.NotFoundContent">
+            <summary>
+            страничка выпадает, если пользователь переходит на несуществующую страничку
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:MyBlogFVV.WEB.Controllers.UserController">
+            <summary>
+            Контроллер для работы с пользователем
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.#ctor(MyBlogFVV.BLL.Interfaces.IUserService,Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Logging.ILogger{MyBlogFVV.WEB.Controllers.UserController})">
+            <summary>
+            Контроллер для работы с пользователем
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Register">
+            <summary>
+            Регистрация пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Register(MyBlogFVV.WEB.Models.User.RegisterViewModel)">
+            <summary>
+            Регистрация пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Login">
+            <summary>
+            Введение логина и пароля
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Login(MyBlogFVV.WEB.Models.User.LoginViewModel)">
+            <summary>
+            Введение логина и пароля
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Logout">
+            <summary>
+            Выход из своей учетной записи
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.MyPage">
+            <summary>
+            Страничка пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Edit">
+            <summary>
+            Редактирование пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Edit(MyBlogFVV.WEB.Models.User.UserEditViewModel)">
+            <summary>
+            Редактирование пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.Delete(System.Int32)">
+            <summary>
+            Удаление пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.AuthorList">
+            <summary>
+            Список всех пользователей
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.AuthorList(System.Int32)">
+            <summary>
+            Выбираем пользователя по Id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyBlogFVV.WEB.Controllers.UserController.AuthorPage(System.Int32)">
+            <summary>
+            Страничка автора статей
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -18,6 +18,8 @@ namespace MyBlogFVV.WEB.Controllers
         readonly ICommentService _commentService = commentService;
         readonly IUserService _userService = userService;
         private readonly ILogger<CommentController> _logger = logger;
+
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
